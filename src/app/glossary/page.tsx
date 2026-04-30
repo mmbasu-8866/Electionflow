@@ -1,7 +1,5 @@
 "use client";
 
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Search, Info, HelpCircle } from "lucide-react";
@@ -31,74 +29,69 @@ export default function GlossaryPage() {
   }, [search]);
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <div className="flex flex-col h-screen overflow-hidden">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6">
-            <h1 className="text-xl font-headline font-bold text-accent">Election Glossary</h1>
-          </header>
-          <main className="flex-1 overflow-y-auto custom-scrollbar p-6">
-            <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
-              <div className="space-y-4">
-                <h2 className="text-3xl font-headline font-bold">Terminology & Concepts</h2>
-                <p className="text-muted-foreground">Demystifying electoral jargon to help you navigate the voting process with confidence.</p>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input 
-                    placeholder="Search terms or definitions..." 
-                    className="pl-12 h-14 text-lg rounded-2xl bg-muted/50 focus:bg-background transition-colors border-muted"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredTerms.length > 0 ? (
-                  filteredTerms.map((item, idx) => (
-                    <Card key={idx} className="hover:border-accent/30 transition-all group border-muted bg-card/50">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-primary group-hover:text-accent transition-colors flex items-center justify-between">
-                          {item.term}
-                          <HelpCircle className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {item.def}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))
-                ) : (
-                  <div className="col-span-full py-12 text-center space-y-4">
-                    <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Search className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                    <h3 className="text-xl font-bold">No terms found</h3>
-                    <p className="text-muted-foreground">Try searching for something else, like "Referendum" or "Ballot".</p>
-                  </div>
-                )}
-              </div>
-
-              <Card className="bg-accent/5 border-accent/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-accent text-lg">
-                    <Info className="h-5 w-5" />
-                    Need more help?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    If you encounter a term not listed here, try asking our AI Assistant on the dashboard for a real-time explanation tailored to your context.
-                  </p>
-                </CardContent>
-              </Card>
+    <div className="flex flex-col h-screen overflow-hidden">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6">
+        <h1 className="text-xl font-headline font-bold text-accent">Election Glossary</h1>
+      </header>
+      <main className="flex-1 overflow-y-auto custom-scrollbar p-6">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-headline font-bold">Terminology & Concepts</h2>
+            <p className="text-muted-foreground">Demystifying electoral jargon to help you navigate the voting process with confidence.</p>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                placeholder="Search terms or definitions..." 
+                className="pl-12 h-14 text-lg rounded-2xl bg-muted/50 focus:bg-background transition-colors border-muted"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-          </main>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredTerms.length > 0 ? (
+              filteredTerms.map((item, idx) => (
+                <Card key={idx} className="hover:border-accent/30 transition-all group border-muted bg-card/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-primary group-hover:text-accent transition-colors flex items-center justify-between">
+                      {item.term}
+                      <HelpCircle className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {item.def}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center space-y-4">
+                <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-bold">No terms found</h3>
+                <p className="text-muted-foreground">Try searching for something else, like "Referendum" or "Ballot".</p>
+              </div>
+            )}
+          </div>
+
+          <Card className="bg-accent/5 border-accent/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-accent text-lg">
+                <Info className="h-5 w-5" />
+                Need more help?
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                If you encounter a term not listed here, try asking our AI Assistant on the dashboard for a real-time explanation tailored to your context.
+              </p>
+            </CardContent>
+          </Card>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </main>
+    </div>
   );
 }
