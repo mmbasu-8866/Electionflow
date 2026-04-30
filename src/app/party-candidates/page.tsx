@@ -1,116 +1,148 @@
+
 "use client";
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Flag, Users, TrendingUp, Info } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RefreshCcw, MapPin, ChevronDown, Search } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
-const parties = [
-  { 
-    name: "03 PDI Perjuangan", 
-    candidates: 12, 
-    votes: "851,200", 
-    lead: "+5.2%", 
-    color: "#E31E24",
-    desc: "Focusing on social welfare and national unity across Jabar-1."
-  },
-  { 
-    name: "12 Partai Amanat Nasional", 
-    candidates: 10, 
-    votes: "656,330", 
-    lead: "+2.1%", 
-    color: "#005BAA",
-    desc: "Advocating for economic reform and youth empowerment programs."
-  },
-  { 
-    name: "15 Partai Solidaritas Indonesia", 
-    candidates: 8, 
-    votes: "194,500", 
-    lead: "+0.8%", 
-    color: "#EF4444",
-    desc: "Transparency and digital governance for the new generation."
-  },
+const partyData = [
+  { id: "01", name: "03 PDI-P", fullName: "Partai Demokrasi Indonesia Perjuangan", votes: "851.468", percentage: 35, color: "#E31E24", region: "Jabar-1" },
+  { id: "02", name: "12 PAN", fullName: "Partai Amanat Nasional", votes: "656.846", percentage: 27, color: "#005BAA", region: "Jabar-1" },
+  { id: "03", name: "15 PSI", fullName: "Partai Solidaritas Indonesia", votes: "194.621", percentage: 8, color: "#EF4444", region: "Jabar-1" },
+  { id: "04", name: "04 Golkar", fullName: "Partai Golongan Karya", votes: "121.638", percentage: 5, color: "#FFD700", region: "Jabar-1" },
+  { id: "05", name: "02 Gerindra", fullName: "Partai Gerakan Indonesia", votes: "97.310", percentage: 4, color: "#B22222", region: "Jabar-1" },
+  { id: "06", name: "05 Nasdem", fullName: "Partai Nasional Demokrasi", votes: "96.887", percentage: 4, color: "#004A99", region: "Jabar-1" },
+  { id: "07", name: "14 Demokrat", fullName: "Partai Demokrat", votes: "72.983", percentage: 3, color: "#005BAA", region: "Jabar-1" },
+  { id: "08", name: "17 PPP", fullName: "Partai Persatuan Pembangunan", votes: "72.665", percentage: 3, color: "#008000", region: "Jabar-1" },
+  { id: "09", name: "08 PKS", fullName: "Partai Keadilan Sosial", votes: "48.655", percentage: 2, color: "#FE5000", region: "Jabar-1" },
 ];
 
 export default function PartyCandidatesPage() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'election-hero');
-
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex flex-col h-screen overflow-hidden">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6">
-            <h1 className="text-xl font-headline font-bold text-accent">Party Performance</h1>
+        <div className="flex flex-col h-screen bg-[#F8F9FA]">
+          {/* Top Header Bar */}
+          <header className="flex h-16 shrink-0 items-center justify-between border-b bg-white px-6 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-[#F1F3F5] px-4 py-2 rounded-2xl border shadow-sm cursor-pointer">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span className="text-sm font-bold">Daerah Pemilihan Jawa Barat Region-1</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="flex flex-col text-right">
+                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Last Update</span>
+                <span className="text-sm font-black">02:35 PM</span>
+              </div>
+              <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 h-10 gap-2 shadow-lg shadow-primary/20">
+                <RefreshCcw className="h-4 w-4" />
+                <span>Refresh</span>
+              </Button>
+            </div>
           </header>
-          <main className="flex-1 overflow-y-auto custom-scrollbar p-6">
-            <div className="max-w-[1600px] mx-auto space-y-8 animate-fade-in">
-              <div className="relative h-64 w-full rounded-[2.5rem] overflow-hidden group shadow-2xl">
-                <img 
-                  src={heroImage?.imageUrl || "https://picsum.photos/seed/party1/1200/400"} 
-                  alt="Party Hero" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  data-ai-hint="political campaign"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex items-center p-12">
-                  <div className="max-w-xl space-y-4">
-                    <Badge className="bg-white text-primary font-bold">Election 2024</Badge>
-                    <h2 className="text-5xl font-black text-white leading-tight">National Party Consensus</h2>
-                    <p className="text-white/90 text-lg font-medium">Monitoring political coalition movements and ballot distributions per party seat.</p>
-                  </div>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {parties.map((party, idx) => (
-                  <Card key={idx} className="rounded-[2.5rem] border shadow-sm hover:shadow-xl transition-all border-muted group overflow-hidden">
-                    <div className="h-2 w-full" style={{ backgroundColor: party.color }} />
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-14 w-14 rounded-2xl border bg-white flex items-center justify-center p-3 shadow-sm group-hover:rotate-6 transition-transform">
-                          <div className="h-full w-full rounded-full" style={{ backgroundColor: party.color }} />
-                        </div>
-                        <Badge variant="outline" className="text-green-500 font-bold border-green-500/30 bg-green-50">
-                          <TrendingUp className="h-3 w-3 mr-1" /> {party.lead}
-                        </Badge>
-                      </div>
-                      <CardTitle className="text-xl font-black">{party.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {party.desc}
-                      </p>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-muted/50 p-4 rounded-3xl space-y-1">
-                          <span className="text-[10px] font-bold text-muted-foreground uppercase">Candidates</span>
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4 text-primary" />
-                            <span className="font-black text-lg">{party.candidates}</span>
-                          </div>
-                        </div>
-                        <div className="bg-muted/50 p-4 rounded-3xl space-y-1">
-                          <span className="text-[10px] font-bold text-muted-foreground uppercase">Votes</span>
-                          <div className="flex items-center gap-2">
-                            <Flag className="h-4 w-4 text-accent" />
-                            <span className="font-black text-lg">{party.votes}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+          <main className="flex-1 overflow-y-auto custom-scrollbar p-8">
+            <div className="max-w-[1400px] mx-auto space-y-6">
+              <h2 className="text-2xl font-black text-[#212529]">Vote Recapitulation - Party</h2>
 
-              <Card className="rounded-[2.5rem] border bg-secondary/30">
-                <CardContent className="p-8 flex items-center justify-between gap-8">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-black">Need More Details?</h3>
-                    <p className="text-muted-foreground">Download the full CSV report for all participating parties including demographic breakdowns.</p>
+              {/* Total Votes Card */}
+              <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-white">
+                <CardContent className="p-8">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Last Updates 02.35 PM</span>
+                    <div className="flex items-baseline gap-4">
+                      <h3 className="text-3xl font-black text-[#212529]">Total Votes Received</h3>
+                      <span className="text-4xl font-black text-primary">2.432.766</span>
+                      <span className="text-sm font-bold text-muted-foreground">Votes</span>
+                    </div>
                   </div>
-                  <Info className="h-12 w-12 text-primary opacity-20" />
+
+                  {/* Filter Bar */}
+                  <div className="mt-8 flex items-center gap-4 p-2 bg-[#F8F9FA] rounded-2xl border border-dashed border-muted-foreground/20">
+                    <div className="flex items-center bg-white rounded-xl px-3 flex-1 border">
+                      <Search className="h-4 w-4 text-muted-foreground mr-2" />
+                      <Input placeholder="Pick Party" className="border-none shadow-none focus-visible:ring-0" />
+                    </div>
+                    <Select>
+                      <SelectTrigger className="w-48 rounded-xl bg-white border">
+                        <SelectValue placeholder="Orderal" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="desc">Highest Votes</SelectItem>
+                        <SelectItem value="asc">Lowest Votes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button variant="outline" className="rounded-xl px-8 border-primary text-primary hover:bg-primary/5 font-bold">Apply</Button>
+                  </div>
                 </CardContent>
+              </Card>
+
+              {/* Table Card */}
+              <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-white">
+                <Table>
+                  <TableHeader className="bg-[#E9ECEF]">
+                    <TableRow className="hover:bg-transparent border-none">
+                      <TableHead className="w-24 font-black text-[#495057] uppercase text-[10px] px-8">Orderal</TableHead>
+                      <TableHead className="w-32 font-black text-[#495057] uppercase text-[10px]">Party Logo</TableHead>
+                      <TableHead className="font-black text-[#495057] uppercase text-[10px]">Vote Recapitulation</TableHead>
+                      <TableHead className="w-48 font-black text-[#495057] uppercase text-[10px] text-right">Total Votes</TableHead>
+                      <TableHead className="w-32 font-black text-[#495057] uppercase text-[10px] text-right px-8">Region</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {partyData.map((party) => (
+                      <TableRow key={party.id} className="group border-b border-[#F1F3F5] last:border-none">
+                        <TableCell className="font-black text-lg text-[#212529] px-8">{party.id}</TableCell>
+                        <TableCell>
+                          <div className="h-12 w-12 rounded-xl border bg-[#F8F9FA] flex items-center justify-center p-2 shadow-sm group-hover:scale-105 transition-transform">
+                            <div className="h-full w-full rounded-full" style={{ backgroundColor: party.color }} />
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-col">
+                                <span className="font-black text-[#212529]">{party.name}</span>
+                                <span className="text-[10px] font-bold text-muted-foreground">{party.fullName}</span>
+                              </div>
+                              <span className="font-black text-sm text-[#212529]">{party.percentage}%</span>
+                            </div>
+                            <div className="h-2 w-full bg-[#E9ECEF] rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000" 
+                                style={{ width: `${party.percentage}%` }} 
+                              />
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-black text-[#212529]">{party.votes}</TableCell>
+                        <TableCell className="text-right font-bold text-muted-foreground px-8">{party.region}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </Card>
             </div>
           </main>

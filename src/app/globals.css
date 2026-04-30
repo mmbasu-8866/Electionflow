@@ -1,69 +1,70 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 240 10% 3.9%;
+    --background: 210 20% 98%;
+    --foreground: 210 10% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 210 10% 16%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 0 72% 51%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 0 72% 51%;
-    --accent-foreground: 0 0% 98%;
+    --popover-foreground: 210 10% 16%;
+    --primary: 358 76% 51%; /* #E31E24 Crimson Red */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 16% 96%;
+    --secondary-foreground: 210 10% 16%;
+    --muted: 210 16% 96%;
+    --muted-foreground: 210 10% 45%;
+    --accent: 358 76% 51%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 0 72% 51%;
-    --radius: 1rem;
+    --border: 210 16% 93%;
+    --input: 210 16% 93%;
+    --ring: 358 76% 51%;
+    --radius: 1.25rem;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 0 72% 51%;
+    --sidebar-foreground: 210 10% 30%;
+    --sidebar-primary: 358 76% 51%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 72% 51%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 5.9% 90%;
-    --sidebar-ring: 0 72% 51%;
+    --sidebar-accent: 210 16% 96%;
+    --sidebar-accent-foreground: 358 76% 51%;
+    --sidebar-border: 210 16% 93%;
+    --sidebar-ring: 358 76% 51%;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 210 10% 4%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 210 10% 6%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 210 10% 6%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 72% 51%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 3.7% 15.9%;
+    --primary: 358 76% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 10% 12%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 0 72% 51%;
-    --accent-foreground: 0 0% 98%;
+    --muted: 210 10% 12%;
+    --muted-foreground: 210 5% 65%;
+    --accent: 358 76% 51%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 0 72% 51%;
+    --border: 210 10% 12%;
+    --input: 210 10% 12%;
+    --ring: 358 76% 51%;
 
-    --sidebar-background: 240 10% 3.9%;
-    --sidebar-foreground: 240 5% 64.9%;
-    --sidebar-primary: 0 72% 51%;
+    --sidebar-background: 210 10% 4%;
+    --sidebar-foreground: 210 5% 65%;
+    --sidebar-primary: 358 76% 51%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 72% 51%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 0 72% 51%;
+    --sidebar-accent: 210 10% 12%;
+    --sidebar-accent-foreground: 358 76% 51%;
+    --sidebar-border: 210 10% 12%;
+    --sidebar-ring: 358 76% 51%;
   }
 }
 
@@ -72,10 +73,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline;
+    @apply font-headline tracking-tight;
   }
 }
 
@@ -86,5 +87,14 @@
   @apply bg-transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-muted rounded-full;
+  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

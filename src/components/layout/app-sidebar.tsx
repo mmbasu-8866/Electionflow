@@ -1,3 +1,4 @@
+
 "use client";
 
 import { 
@@ -62,16 +63,16 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="sidebar" className="border-r">
+    <Sidebar variant="sidebar" className="border-r bg-white">
       <SidebarHeader className="p-6">
         <div className="flex items-center gap-3 mb-6">
-          <Avatar className="h-12 w-12 border-2 border-primary">
-            <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/user1/100"} />
-            <AvatarFallback>{user?.displayName?.charAt(0) || "U"}</AvatarFallback>
+          <Avatar className="h-12 w-12 border-2 border-primary ring-2 ring-primary/20 ring-offset-2">
+            <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/rio/100"} />
+            <AvatarFallback>{user?.displayName?.charAt(0) || "R"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col overflow-hidden">
-            <span className="text-sm font-bold truncate">{user?.displayName || "Rio Dewanta"}</span>
-            <span className="text-xs text-muted-foreground truncate">{user?.email || "KPU Dapil Jabar-1"}</span>
+            <span className="text-sm font-black text-[#212529] truncate">{user?.displayName || "Rio Dewanta"}</span>
+            <span className="text-xs font-bold text-muted-foreground truncate">{user?.email || "KPU Dapil Jabar-1"}</span>
           </div>
         </div>
       </SidebarHeader>
@@ -85,15 +86,15 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === item.url}
-                    className={`h-11 px-4 rounded-xl transition-all ${
+                    className={`h-12 px-4 rounded-2xl transition-all ${
                       pathname === item.url 
-                      ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20" 
-                      : "text-muted-foreground hover:bg-secondary"
+                      ? "bg-primary text-white hover:bg-primary/90 shadow-xl shadow-primary/30" 
+                      : "text-[#495057] hover:bg-[#F1F3F5] font-bold"
                     }`}
                   >
                     <Link href={item.url}>
                       <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} />
-                      <span className="font-medium">{item.title}</span>
+                      <span className="font-black text-sm">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -106,24 +107,24 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 space-y-2">
         <SidebarMenuButton 
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="h-11 px-4 text-muted-foreground hover:bg-secondary rounded-xl"
+          className="h-11 px-4 text-[#495057] font-bold hover:bg-[#F1F3F5] rounded-xl"
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
         </SidebarMenuButton>
 
-        <SidebarMenuButton className="h-11 px-4 text-muted-foreground hover:bg-secondary rounded-xl">
+        <SidebarMenuButton className="h-11 px-4 text-[#495057] font-bold hover:bg-[#F1F3F5] rounded-xl">
           <Settings className="h-5 w-5" />
           <span>Setting</span>
         </SidebarMenuButton>
 
         {user ? (
-          <SidebarMenuButton onClick={handleLogout} className="h-11 px-4 text-destructive hover:bg-destructive/10 rounded-xl">
+          <SidebarMenuButton onClick={handleLogout} className="h-11 px-4 text-destructive font-black hover:bg-destructive/10 rounded-xl">
             <LogOut className="h-5 w-5" />
             <span>Sign Out</span>
           </SidebarMenuButton>
         ) : (
-          <SidebarMenuButton onClick={handleLogin} className="h-11 px-4 text-primary hover:bg-primary/10 rounded-xl">
+          <SidebarMenuButton onClick={handleLogin} className="h-11 px-4 text-primary font-black hover:bg-primary/10 rounded-xl">
             <UserIcon className="h-5 w-5" />
             <span>Sign In</span>
           </SidebarMenuButton>
