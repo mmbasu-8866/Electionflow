@@ -15,7 +15,7 @@ type Message = {
 
 export function VoterBotChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", content: "Hello! I'm VoterBot. How can I help you with the election process today?" }
+    { role: "bot", content: "Hello! I'm Electionflow. How can I help you with the election process today?" }
   ]);
   const [input, setInput] = useState("");
   const [location, setLocation] = useState("");
@@ -97,7 +97,7 @@ export function VoterBotChatWidget() {
                 <Loader2 className="h-4 w-4 animate-spin" />
               </div>
               <div className="bg-muted border border-border rounded-2xl rounded-tl-none p-3 text-sm text-muted-foreground italic">
-                VoterBot is typing...
+                Electionflow is typing...
               </div>
             </div>
           )}

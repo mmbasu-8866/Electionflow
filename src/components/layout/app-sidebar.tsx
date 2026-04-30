@@ -7,7 +7,10 @@ import {
   Library, 
   Home, 
   Info,
-  Vote
+  Vote,
+  LogIn,
+  LogOut,
+  User as UserIcon
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,6 +26,10 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/auth-provider";
+import { auth } from "@/lib/firebase";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const items = [
   {
@@ -49,6 +56,24 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -58,7 +83,7 @@ export function AppSidebar() {
             <Vote className="h-6 w-6" />
           </div>
           <span className="text-lg font-headline font-bold tracking-tight group-data-[collapsible=icon]:hidden">
-            Voter<span className="text-accent">Bot</span>
+            Election<span className="text-accent">flow</span>
           </span>
         </div>
       </SidebarHeader>
@@ -87,10 +112,30 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
-          <Info className="h-3 w-3" />
-          <span>v1.0 Civic Tech</span>
-        </div>
+        {user ? (
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+            <div className="flex items-center gap-2 flex-1 group-data-[collapsible=icon]:hidden overflow-hidden">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                  {user.displayName?.charAt(0) || <UserIcon className="h-4 w-4" />}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col truncate">
+                <span className="text-sm font-medium truncate">{user.displayName}</span>
+              </div>
+            </div>
+            <SidebarMenuButton onClick={handleLogout} className="w-auto ml-auto" tooltip="Sign Out">
+              <LogOut className="h-4 w-4" />
+              <span className="group-data-[collapsible=icon]:hidden">Sign Out</span>
+            </SidebarMenuButton>
+          </div>
+        ) : (
+          <SidebarMenuButton onClick={handleLogin} tooltip="Sign In">
+            <LogIn className="h-4 w-4" />
+            <span className="group-data-[collapsible=icon]:hidden">Sign In with Google</span>
+          </SidebarMenuButton>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

@@ -16,7 +16,7 @@ export function DashboardContent() {
               <div className="relative z-10">
                 <h2 className="text-3xl font-headline font-bold mb-4">Empowering your <span className="text-accent">Civic Journey</span></h2>
                 <p className="text-muted-foreground text-lg max-w-lg mb-6">
-                  VoterBot is your intelligent companion for navigating the complexities of the electoral process. 
+                  Electionflow is your intelligent companion for navigating the complexities of the electoral process. 
                   Ask anything from registration deadlines to polling locations.
                 </p>
                 <div className="flex gap-4">
