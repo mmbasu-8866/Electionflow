@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "election-hero",
+      "description": "Civic engagement and voting illustration",
+      "imageUrl": "https://picsum.photos/seed/voter1/1200/600",
+      "imageHint": "voting democracy"
+    },
+    {
+      "id": "registration-guide",
+      "description": "Step by step voter registration",
+      "imageUrl": "https://picsum.photos/seed/reg/600/400",
+      "imageHint": "registration form"
+    },
+    {
+      "id": "polling-station",
+      "description": "Modern polling station environment",
+      "imageUrl": "https://picsum.photos/seed/polling/600/400",
+      "imageHint": "polling station"
+    }
+  ]
 }
