@@ -1,16 +1,15 @@
 "use client";
 
 import { 
-  MessageSquare, 
-  BookOpen, 
-  Calendar, 
-  Library, 
-  Home, 
-  Info,
-  Vote,
-  LogIn,
+  Home,
+  Map,
+  Users,
+  Flag,
+  User as UserIcon,
+  Settings,
   LogOut,
-  User as UserIcon
+  Moon,
+  Sun
 } from "lucide-react";
 import {
   Sidebar,
@@ -20,7 +19,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarFooter,
 } from "@/components/ui/sidebar";
@@ -30,33 +28,21 @@ import { useAuth } from "@/components/auth-provider";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 
-const items = [
-  {
-    title: "Assistant",
-    url: "/",
-    icon: MessageSquare,
-  },
-  {
-    title: "Process Guides",
-    url: "/guides",
-    icon: BookOpen,
-  },
-  {
-    title: "Election Timeline",
-    url: "/timeline",
-    icon: Calendar,
-  },
-  {
-    title: "Glossary",
-    url: "/glossary",
-    icon: Library,
-  },
+const navItems = [
+  { title: "Dashboard", url: "/", icon: Home },
+  { title: "Region", url: "/region", icon: Map },
+  { title: "Population Data", url: "/population", icon: Users },
+  { title: "Party Candidates", url: "/party-candidates", icon: Flag },
+  { title: "Candidates", url: "/candidates", icon: UserIcon },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -76,33 +62,38 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg">
-            <Vote className="h-6 w-6" />
+    <Sidebar variant="sidebar" className="border-r">
+      <SidebarHeader className="p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <Avatar className="h-12 w-12 border-2 border-primary">
+            <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/user1/100"} />
+            <AvatarFallback>{user?.displayName?.charAt(0) || "U"}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col overflow-hidden">
+            <span className="text-sm font-bold truncate">{user?.displayName || "Rio Dewanta"}</span>
+            <span className="text-xs text-muted-foreground truncate">{user?.email || "KPU Dapil Jabar-1"}</span>
           </div>
-          <span className="text-lg font-headline font-bold tracking-tight group-data-[collapsible=icon]:hidden">
-            Election<span className="text-accent">flow</span>
-          </span>
         </div>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
+            <SidebarMenu className="gap-2 px-2">
+              {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === item.url}
-                    tooltip={item.title}
-                    className="transition-all duration-200"
+                    className={`h-11 px-4 rounded-xl transition-all ${
+                      pathname === item.url 
+                      ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20" 
+                      : "text-muted-foreground hover:bg-secondary"
+                    }`}
                   >
                     <Link href={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
+                      <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} />
+                      <span className="font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -111,29 +102,30 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
+
+      <SidebarFooter className="p-4 space-y-2">
+        <SidebarMenuButton 
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="h-11 px-4 text-muted-foreground hover:bg-secondary rounded-xl"
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+        </SidebarMenuButton>
+
+        <SidebarMenuButton className="h-11 px-4 text-muted-foreground hover:bg-secondary rounded-xl">
+          <Settings className="h-5 w-5" />
+          <span>Setting</span>
+        </SidebarMenuButton>
+
         {user ? (
-          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-            <div className="flex items-center gap-2 flex-1 group-data-[collapsible=icon]:hidden overflow-hidden">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                  {user.displayName?.charAt(0) || <UserIcon className="h-4 w-4" />}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col truncate">
-                <span className="text-sm font-medium truncate">{user.displayName}</span>
-              </div>
-            </div>
-            <SidebarMenuButton onClick={handleLogout} className="w-auto ml-auto" tooltip="Sign Out">
-              <LogOut className="h-4 w-4" />
-              <span className="group-data-[collapsible=icon]:hidden">Sign Out</span>
-            </SidebarMenuButton>
-          </div>
+          <SidebarMenuButton onClick={handleLogout} className="h-11 px-4 text-destructive hover:bg-destructive/10 rounded-xl">
+            <LogOut className="h-5 w-5" />
+            <span>Sign Out</span>
+          </SidebarMenuButton>
         ) : (
-          <SidebarMenuButton onClick={handleLogin} tooltip="Sign In">
-            <LogIn className="h-4 w-4" />
-            <span className="group-data-[collapsible=icon]:hidden">Sign In with Google</span>
+          <SidebarMenuButton onClick={handleLogin} className="h-11 px-4 text-primary hover:bg-primary/10 rounded-xl">
+            <UserIcon className="h-5 w-5" />
+            <span>Sign In</span>
           </SidebarMenuButton>
         )}
       </SidebarFooter>
