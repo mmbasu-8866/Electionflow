@@ -1,0 +1,59 @@
+
+{
+  "entities": {
+    "Candidate": {
+      "title": "Candidate",
+      "description": "Detailed profile of an election candidate.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "party": { "type": "string" },
+        "education": { "type": "string" },
+        "assets": { "type": "string" },
+        "criminalRecords": { "type": "string" },
+        "constituency": { "type": "string" },
+        "biography": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["name", "party", "constituency"]
+    },
+    "SimulatedVote": {
+      "title": "Simulated Vote",
+      "description": "A vote cast in the mock simulator.",
+      "type": "object",
+      "properties": {
+        "candidateId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      }
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real-time election alert.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["alert", "update", "result"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com"]
+  },
+  "firestore": {
+    "/candidates/{candidateId}": {
+      "schema": "#/backend/entities/Candidate",
+      "description": "Candidate profiles."
+    },
+    "/simulatedVotes/{voteId}": {
+      "schema": "#/backend/entities/SimulatedVote",
+      "description": "Votes for the mock simulator."
+    },
+    "/notifications/{notificationId}": {
+      "schema": "#/backend/entities/Notification",
+      "description": "Global election notifications."
+    }
+  }
+}

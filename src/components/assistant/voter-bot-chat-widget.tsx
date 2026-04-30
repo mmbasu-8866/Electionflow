@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -5,8 +6,10 @@ import { electionProcessChat } from "@/ai/flows/election-process-chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2, User, Bot, MapPin } from "lucide-react";
+import { Send, Loader2, User, Bot, MapPin, Sparkles, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 type Message = {
   role: "user" | "bot";
@@ -15,11 +18,12 @@ type Message = {
 
 export function VoterBotChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", content: "Hello! I'm Electionflow. How can I help you with the election process today?" }
+    { role: "bot", content: "Hello! I'm Electionflow. How can I help you today? I can also explain things simply for kids!" }
   ]);
   const [input, setInput] = useState("");
   const [location, setLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isEli10, setIsEli10] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,26 +47,41 @@ export function VoterBotChatWidget() {
     try {
       const response = await electionProcessChat({ 
         query: userMessage, 
-        location: location.trim() || undefined 
+        location: location.trim() || undefined,
+        mode: isEli10 ? 'eli10' : 'standard'
       });
       setMessages(prev => [...prev, { role: "bot", content: response.answer }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: "bot", content: "Sorry, I encountered an error processing your request. Please try again." }]);
+      setMessages(prev => [...prev, { role: "bot", content: "Sorry, I encountered an error. Please try again." }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-full max-h-[600px]">
-      <div className="p-3 bg-muted/20 border-b flex items-center gap-2">
-        <MapPin className="h-4 w-4 text-accent" />
-        <Input 
-          placeholder="Set location (optional)..." 
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="h-8 text-xs bg-background border-muted"
-        />
+    <div className="flex flex-col h-full max-h-[700px]">
+      <div className="p-3 bg-muted/20 border-b space-y-3">
+        <div className="flex items-center gap-2">
+          <MapPin className="h-4 w-4 text-accent" />
+          <Input 
+            placeholder="Set location (optional)..." 
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="h-8 text-xs bg-background border-muted"
+          />
+        </div>
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+             <HelpCircle className="h-4 w-4 text-primary" />
+             <Label htmlFor="eli10-mode" className="text-[10px] font-black uppercase tracking-wider">Explain Like I'm 10</Label>
+          </div>
+          <Switch 
+            id="eli10-mode" 
+            checked={isEli10} 
+            onCheckedChange={setIsEli10}
+            className="scale-75"
+          />
+        </div>
       </div>
 
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>
@@ -97,7 +116,7 @@ export function VoterBotChatWidget() {
                 <Loader2 className="h-4 w-4 animate-spin" />
               </div>
               <div className="bg-muted border border-border rounded-2xl rounded-tl-none p-3 text-sm text-muted-foreground italic">
-                Electionflow is typing...
+                Analyzing trends...
               </div>
             </div>
           )}
@@ -107,7 +126,7 @@ export function VoterBotChatWidget() {
       <form onSubmit={handleSubmit} className="p-4 border-t bg-background mt-auto">
         <div className="flex gap-2">
           <Input 
-            placeholder="Ask about registration, dates..." 
+            placeholder={isEli10 ? "Ask a simple question..." : "Ask about trends, Karnataka leads..."} 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
