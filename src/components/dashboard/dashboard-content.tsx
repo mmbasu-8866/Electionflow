@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,32 +87,6 @@ export function DashboardContent() {
         </div>
       </div>
 
-      {/* AI Assistant Section (Moved to Top) */}
-      <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden bg-card">
-        <CardHeader className="bg-primary/5 border-b shrink-0 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
-                <Bot className="h-6 w-6" />
-              </div>
-              <div>
-                <CardTitle className="text-lg font-black flex items-center gap-2 text-primary">
-                  Election Assistant
-                  <Sparkles className="h-3 w-3 text-accent" />
-                </CardTitle>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Powered Insights & Real-time Q&A</p>
-              </div>
-            </div>
-            <Badge className="bg-primary/10 text-primary border-none font-bold">LIVE & READY</Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="h-[400px]">
-            <VoterBotChatWidget />
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Votes Received Radial Chart */}
         <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden">
@@ -193,7 +166,33 @@ export function DashboardContent() {
         </Card>
       </div>
 
-      {/* Region Heatmap Card */}
+      {/* AI Assistant Section (Positioned above Geographic Coverage) */}
+      <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden bg-card">
+        <CardHeader className="bg-primary/5 border-b shrink-0 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+                <Bot className="h-6 w-6" />
+              </div>
+              <div>
+                <CardTitle className="text-lg font-black flex items-center gap-2 text-primary">
+                  Election Assistant
+                  <Sparkles className="h-3 w-3 text-accent" />
+                </CardTitle>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Powered Insights & Real-time Q&A</p>
+              </div>
+            </div>
+            <Badge className="bg-primary/10 text-primary border-none font-bold">LIVE & READY</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="h-[400px]">
+            <VoterBotChatWidget />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Region Heatmap Card (Geographic Coverage) */}
       <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden h-[450px] relative">
         <CardHeader className="absolute top-0 left-0 z-10 bg-card/80 backdrop-blur-md w-full border-b">
           <div className="flex items-center justify-between">
