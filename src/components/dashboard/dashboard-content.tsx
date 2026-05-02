@@ -16,24 +16,9 @@ import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { CandidateStats } from "./candidate-stats";
 import { GeographicCoverage } from "./geographic-coverage";
-
-/**
- * Dynamically import heavy chart components to improve performance.
- */
-const VoteStats = dynamic(() => import("./vote-stats").then(mod => mod.VoteStats), { 
-  ssr: false,
-  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
-});
-
-const PartyStats = dynamic(() => import("./party-stats").then(mod => mod.PartyStats), { 
-  ssr: false,
-  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
-});
-
-const VoterProfile = dynamic(() => import("./voter-profile").then(mod => mod.VoterProfile), { 
-  ssr: false,
-  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
-});
+import { VoteStats } from "./vote-stats";
+import { PartyStats } from "./party-stats";
+import { VoterProfile } from "./voter-profile";
 
 /**
  * Dynamically import the heavy Chat Widget to improve initial load performance.
