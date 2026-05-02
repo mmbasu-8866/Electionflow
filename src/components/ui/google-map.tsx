@@ -55,8 +55,7 @@ export function GoogleMap({ center, zoom = 12, markers = [], className }: Google
         });
 
         setIsLoaded(true);
-      } catch (e) {
-        console.error("Map load error:", e);
+      } catch {
         setError("Failed to load map");
       }
     };
@@ -90,8 +89,8 @@ export function GoogleMap({ center, zoom = 12, markers = [], className }: Google
           });
           markersRef.current.push(marker);
         });
-      } catch (e) {
-        console.error("Error updating markers:", e);
+      } catch {
+        // Silent failure for marker updates
       }
     };
 

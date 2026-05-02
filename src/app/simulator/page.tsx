@@ -68,8 +68,7 @@ export default function SimulatorPage() {
 
       setHasVoted(true);
       toast({ title: "Vote Cast!", description: "Your simulated vote has been recorded." });
-    } catch (e) {
-      console.error(e);
+    } catch {
       toast({ title: "Submission Failed", description: "Could not record your vote right now. Please try again." });
     }
   }, [user, hasVoted]);

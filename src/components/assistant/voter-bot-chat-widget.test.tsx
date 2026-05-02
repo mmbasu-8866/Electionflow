@@ -2,6 +2,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { VoterBotChatWidget } from './voter-bot-chat-widget'
 import { electionProcessChat } from '@/ai/flows/election-process-chat'
 import { vi, expect, describe, it, beforeEach } from 'vitest'
+import { toast } from '@/hooks/use-toast'
+
+// Mock toast
+vi.mock('@/hooks/use-toast', () => ({
+  toast: vi.fn(),
+}))
 
 // Mock the chat flow
 vi.mock('@/ai/flows/election-process-chat', () => ({
@@ -106,7 +112,6 @@ describe('VoterBotChatWidget', () => {
   })
 
   it('prevents large image uploads', () => {
-    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {})
     render(<VoterBotChatWidget />)
     
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
@@ -115,7 +120,8 @@ describe('VoterBotChatWidget', () => {
     
     fireEvent.change(fileInput, { target: { files: [largeFile] } })
     
-    expect(alertMock).toHaveBeenCalledWith('Image too large. Please select a file under 5MB.')
-    alertMock.mockRestore()
+    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ 
+      title: 'Image too large' 
+    }))
   })
 })

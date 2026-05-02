@@ -67,16 +67,16 @@ export function AppSidebar() {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch {
+      // Silent error handling for production
     }
   };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-    } catch (error) {
-      console.error("Logout failed:", error);
+    } catch {
+      // Silent error handling for production
     }
   };
 

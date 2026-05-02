@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, ChangeEvent, FormEvent } from "react";
 import { electionProcessChat } from "@/ai/flows/election-process-chat";
+import { toast } from "@/hooks/use-toast";
 
 export type Message = {
   role: "user" | "bot";
@@ -50,7 +51,7 @@ export function useVoterBot() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("Image too large. Please select a file under 5MB.");
+        toast({ title: "Image too large", description: "Please select a file under 5MB.", variant: "destructive" });
         return;
       }
       
