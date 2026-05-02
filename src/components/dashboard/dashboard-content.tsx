@@ -75,10 +75,10 @@ export function DashboardContent() {
             <span className="text-sm font-semibold">Daerah Pemilihan Jawa Barat Region-1</span>
             <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </div>
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10" aria-label="Search across regions">
             <Search className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full h-10 w-10">
+          <Button variant="outline" size="icon" className="rounded-full h-10 w-10" aria-label="More options">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </div>
@@ -88,16 +88,19 @@ export function DashboardContent() {
             <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Last Update</span>
             <span className="text-sm font-bold">02:35 PM</span>
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 h-10 gap-2 shadow-lg shadow-primary/20">
+          <Button 
+            className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 h-10 gap-2 shadow-lg shadow-primary/20"
+            aria-label="Refresh latest election data"
+          >
             <RefreshCcw className="h-4 w-4" />
             <span>Refresh</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" role="region" aria-label="Top Stats Overview">
         {/* Votes Received Radial Chart */}
-        <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden">
+        <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden" role="status" aria-label={`Current vote count: ${votePercentage}% counted`}>
           <CardHeader className="pb-0">
             <CardTitle className="text-xl font-bold text-primary">Votes Received</CardTitle>
           </CardHeader>
@@ -236,7 +239,7 @@ export function DashboardContent() {
 
       {/* Voter Profile Section */}
       <div className="space-y-4">
-        <h3 className="text-2xl font-bold text-primary px-2">Voter's Profile</h3>
+        <h3 className="text-2xl font-bold text-primary px-2">Voter&apos;s Profile</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="rounded-[2.5rem] border shadow-sm">
             <CardHeader>

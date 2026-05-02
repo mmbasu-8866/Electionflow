@@ -7,7 +7,6 @@ import {
   Users,
   Flag,
   User as UserIcon,
-  Settings,
   LogOut,
   Moon,
   Sun,

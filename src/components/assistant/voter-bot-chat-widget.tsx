@@ -6,7 +6,7 @@ import { electionProcessChat } from "@/ai/flows/election-process-chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2, User, Bot, MapPin, Sparkles, HelpCircle, Paperclip, X, ImageIcon } from "lucide-react";
+import { Send, Loader2, User, Bot, MapPin, HelpCircle, Paperclip, X, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -73,7 +73,7 @@ export function VoterBotChatWidget() {
         image: userImage || undefined
       });
       setMessages(prev => [...prev, { role: "bot", content: response.answer }]);
-    } catch (error) {
+    } catch {
       setMessages(prev => [...prev, { role: "bot", content: "Sorry, I encountered an error. Please try again." }]);
     } finally {
       setIsLoading(false);
@@ -96,7 +96,7 @@ export function VoterBotChatWidget() {
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
              <HelpCircle className="h-4 w-4 text-primary" aria-hidden="true" />
-             <Label htmlFor="eli10-mode" className="text-[10px] font-black uppercase tracking-wider">Explain Like I'm 10</Label>
+             <Label htmlFor="eli10-mode" className="text-[10px] font-black uppercase tracking-wider">Explain Like I&apos;m 10</Label>
           </div>
           <Switch 
             id="eli10-mode" 
@@ -176,6 +176,7 @@ export function VoterBotChatWidget() {
               size="icon" 
               className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-destructive text-destructive-foreground shadow-sm"
               onClick={() => setSelectedImage(null)}
+              aria-label="Remove attached image"
             >
               <X className="h-3 w-3" />
             </Button>
@@ -196,6 +197,7 @@ export function VoterBotChatWidget() {
             className="rounded-full shrink-0 border-muted"
             onClick={() => fileInputRef.current?.click()}
             disabled={isLoading}
+            aria-label="Attach image"
           >
             <Paperclip className="h-4 w-4" />
           </Button>
@@ -221,3 +223,4 @@ export function VoterBotChatWidget() {
     </div>
   );
 }
+

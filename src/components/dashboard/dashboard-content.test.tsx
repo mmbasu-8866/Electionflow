@@ -4,9 +4,9 @@ import { expect, test, vi } from 'vitest'
 
 // Mock next/dynamic
 vi.mock('next/dynamic', () => ({
-  default: (fn: () => Promise<React.ComponentType>) => {
+  default: () => {
     // If it's the assistant, return the test-id div
-    const Component = ({ children }: { children?: React.ReactNode }) => {
+    const Component = () => {
       // Check if the dynamic import is for the assistant
       return <div data-testid="voter-bot-chat-widget" />;
     };

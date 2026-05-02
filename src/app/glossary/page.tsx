@@ -39,9 +39,10 @@ export default function GlossaryPage() {
             <h2 className="text-3xl font-headline font-bold">Terminology & Concepts</h2>
             <p className="text-muted-foreground">Demystifying electoral jargon to help you navigate the voting process with confidence.</p>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" aria-hidden="true" />
               <Input 
                 placeholder="Search terms or definitions..." 
+                aria-label="Search glossary terms"
                 className="pl-12 h-14 text-lg rounded-2xl bg-muted/50 focus:bg-background transition-colors border-muted"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -49,14 +50,14 @@ export default function GlossaryPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" role="list" aria-label="Electoral terms">
             {filteredTerms.length > 0 ? (
               filteredTerms.map((item, idx) => (
-                <Card key={idx} className="hover:border-accent/30 transition-all group border-muted bg-card/50">
+                <Card key={idx} className="hover:border-accent/30 transition-all group border-muted bg-card/50" role="listitem">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-primary group-hover:text-accent transition-colors flex items-center justify-between">
                       {item.term}
-                      <HelpCircle className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <HelpCircle className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -72,7 +73,7 @@ export default function GlossaryPage() {
                   <Search className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="text-xl font-bold">No terms found</h3>
-                <p className="text-muted-foreground">Try searching for something else, like "Referendum" or "Ballot".</p>
+                <p className="text-muted-foreground">Try searching for something else, like &quot;Referendum&quot; or &quot;Ballot&quot;.</p>
               </div>
             )}
           </div>

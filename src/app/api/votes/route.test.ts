@@ -1,6 +1,5 @@
 import { expect, it, describe, vi } from 'vitest'
 import { POST } from './route'
-import { NextResponse } from 'next/server'
 import { addDoc } from 'firebase/firestore'
 
 vi.mock('firebase/firestore', () => ({
@@ -42,6 +41,7 @@ describe('POST /api/votes', () => {
   })
 
   it('saves a vote with null userId', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as any)
     const request = new Request('http://localhost/api/votes', {
       method: 'POST',

@@ -21,9 +21,9 @@ export function GoogleMap({ center, zoom = 12, markers = [], className }: Google
       try {
         if (!mapRef.current) return;
 
-        // @ts-ignore - for v2 compatibility
+        // @ts-expect-error - for v2 compatibility
         const { Map } = await importLibrary("maps", { apiKey, version: "weekly" }) as google.maps.MapsLibrary;
-        // @ts-ignore
+        // @ts-expect-error - for v2 compatibility
         const { AdvancedMarkerElement } = await importLibrary("marker", { apiKey, version: "weekly" }) as google.maps.MarkerLibrary;
 
         const map = new Map(mapRef.current, {

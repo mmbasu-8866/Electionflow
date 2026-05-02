@@ -60,19 +60,19 @@ export default function CandidatesPage() {
           <h2 className="text-2xl font-black text-foreground">Vote Recapitulation - Candidates</h2>
 
           {/* Summary Card */}
-          <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-card">
+          <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-card" role="region" aria-label="Candidate statistics summary">
             <CardContent className="p-8">
               <div className="space-y-1">
                 <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Candidate Overview</span>
                 <div className="flex items-baseline gap-4">
                   <h3 className="text-3xl font-black text-foreground">Top Individual Performers</h3>
-                  <span className="text-4xl font-black text-primary">1.757.870</span>
+                  <span className="text-4xl font-black text-primary" aria-label="Total votes pooled: 1,757,870">1.757.870</span>
                   <span className="text-sm font-bold text-muted-foreground">Votes Pooled</span>
                 </div>
               </div>
 
               {/* Filter Bar */}
-              <div className="mt-8 flex items-center gap-4 p-2 bg-background rounded-2xl border border-dashed border-muted-foreground/20">
+              <div className="mt-8 flex items-center gap-4 p-2 bg-background rounded-2xl border border-dashed border-muted-foreground/20" role="search" aria-label="Filter candidates">
                 <div className="flex items-center bg-card rounded-xl px-3 flex-1 border">
                   <Search className="h-4 w-4 text-muted-foreground mr-2" aria-hidden="true" />
                   <Input 
@@ -81,8 +81,8 @@ export default function CandidatesPage() {
                     className="border-none shadow-none focus-visible:ring-0" 
                   />
                 </div>
-                <Select aria-label="Filter by party">
-                  <SelectTrigger className="w-48 rounded-xl bg-card border" aria-label="Select party filter">
+                <Select aria-label="Filter by political party">
+                  <SelectTrigger className="w-48 rounded-xl bg-card border" aria-label="Select party to filter by">
                     <SelectValue placeholder="Party" />
                   </SelectTrigger>
                   <SelectContent>
@@ -98,7 +98,7 @@ export default function CandidatesPage() {
 
           {/* Table Card */}
           <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-card">
-            <Table>
+            <Table aria-label="Detailed candidate recapitulation list">
               <TableHeader className="bg-muted">
                 <TableRow className="hover:bg-transparent border-none">
                   <TableHead className="w-24 font-black text-muted-foreground uppercase text-[10px] px-8">Rank</TableHead>
@@ -112,18 +112,18 @@ export default function CandidatesPage() {
               <TableBody>
                 {candidateData.map((candidate) => (
                   <TableRow key={candidate.id} className="group border-b border-border last:border-none">
-                    <TableCell className="font-black text-lg text-foreground px-8">{candidate.id}</TableCell>
+                    <TableCell className="font-black text-lg text-foreground px-8" aria-label={`Rank ${candidate.id}`}>{candidate.id}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10 border shadow-sm">
-                          <AvatarImage src={`https://picsum.photos/seed/${candidate.icon}/100`} />
+                          <AvatarImage src={`https://picsum.photos/seed/${candidate.icon}/100`} alt={`${candidate.name} avatar`} />
                           <AvatarFallback className="bg-primary/10 text-primary font-bold">{candidate.icon}</AvatarFallback>
                         </Avatar>
                         <span className="font-black text-foreground group-hover:text-primary transition-colors">{candidate.name}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="px-3 py-1 bg-muted rounded-full text-[10px] font-black uppercase text-muted-foreground">{candidate.party}</span>
+                      <span className="px-3 py-1 bg-muted rounded-full text-[10px] font-black uppercase text-muted-foreground" aria-label={`Party: ${candidate.party}`}>{candidate.party}</span>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-2">
@@ -131,7 +131,14 @@ export default function CandidatesPage() {
                           <span className="text-[10px] font-bold text-muted-foreground uppercase">Target Coverage</span>
                           <span className="font-black text-sm text-foreground">{candidate.percentage}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-1.5 w-full bg-muted rounded-full overflow-hidden"
+                          role="progressbar"
+                          aria-valuenow={candidate.percentage}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-label={`Target coverage for ${candidate.name}: ${candidate.percentage}%`}
+                        >
                           <div 
                             className="h-full bg-primary transition-all duration-1000" 
                             style={{ width: `${candidate.percentage}%` }} 
@@ -139,7 +146,7 @@ export default function CandidatesPage() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right font-black text-foreground">{candidate.votes}</TableCell>
+                    <TableCell className="text-right font-black text-foreground" aria-label={`${candidate.votes} votes`}>{candidate.votes}</TableCell>
                     <TableCell className="text-right font-bold text-muted-foreground px-8">{candidate.region}</TableCell>
                   </TableRow>
                 ))}

@@ -131,7 +131,7 @@ export default function SimulatorPage() {
               <div className="space-y-2">
                 <h3 className="text-xl font-black">Real-time Visualization</h3>
                 <p className="text-sm text-muted-foreground">
-                  Our platform uses Firebase real-time listeners. As soon as a user clicks "Cast Vote", the results update instantly for everyone connected to the dashboard.
+                  Our platform uses Firebase real-time listeners. As soon as a user clicks &quot;Cast Vote&quot;, the results update instantly for everyone connected to the dashboard.
                 </p>
               </div>
             </CardContent>

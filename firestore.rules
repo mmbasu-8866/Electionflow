@@ -1,8 +1,30 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // User personal data
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Publicly readable collections
+    match /candidates/{candidateId} {
+      allow read: if true;
+      allow write: if false; // Only admin via backend/console
+    }
+    
+    match /simulatedVotes/{voteId} {
+      allow read: if true;
+      allow write: if false; // Only via API route (serverDb)
+    }
+    
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -80,7 +80,7 @@ export default function GuidesPage() {
                   <p className="text-lg leading-relaxed">{registrationSteps[activeStep].desc}</p>
                   <div className="bg-muted/50 rounded-lg p-4 border border-border">
                     <h5 className="font-bold text-sm text-accent mb-2">Pro Tip</h5>
-                    <p className="text-sm text-muted-foreground">Most states allow online registration through their Secretary of State website. Make sure you have your driver's license number ready!</p>
+                    <p className="text-sm text-muted-foreground">Most states allow online registration through their Secretary of State website. Make sure you have your driver&apos;s license number ready!</p>
                   </div>
                   <div className="flex justify-between pt-4">
                     <Button 

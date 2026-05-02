@@ -1,4 +1,5 @@
-import type {Metadata} from 'next';
+/* eslint-disable @next/next/no-page-custom-font */
+import type { Metadata } from "next";
 import './globals.css';
 import { AuthProvider } from '@/components/auth-provider';
 import { ThemeProvider } from '@/components/theme-provider';

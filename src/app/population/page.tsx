@@ -2,7 +2,6 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Users, PieChart as PieChartIcon, TrendingUp, Map } from "lucide-react";
-import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie, Label } from "recharts";
 

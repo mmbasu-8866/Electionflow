@@ -46,6 +46,10 @@ const prompt = ai.definePrompt({
   ],
 });
 
+/**
+ * The main AI flow for handling election-related queries.
+ * Supports image analysis, personalized location advice, and "Explain Like I'm 10" mode.
+ */
 export const electionProcessChat = ai.defineFlow(
   {
     name: 'electionProcessChat',

@@ -1,11 +1,9 @@
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { MapPin, Navigation, Info, Search } from "lucide-react";
+import { Navigation, Info, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
-import Image from "next/image";
 import { GoogleMap } from "@/components/ui/google-map";
 
 const votingCenters = [
