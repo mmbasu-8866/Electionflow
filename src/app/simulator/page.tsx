@@ -71,44 +71,49 @@ export default function SimulatorPage() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-white">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-white" role="banner">
         <h1 className="text-xl font-headline font-bold text-accent">Mock Voting Simulator</h1>
       </header>
-      <main className="flex-1 overflow-y-auto p-6 space-y-8">
+      <main className="flex-1 overflow-y-auto p-6 space-y-8" role="main" aria-label="Voting Simulation Tool">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
           <div className="space-y-2 text-center">
-            <Badge variant="secondary" className="mb-2">Experimental Feature</Badge>
+            <Badge variant="secondary" className="mb-2" aria-label="Experimental Feature Notice">Experimental Feature</Badge>
             <h2 className="text-4xl font-black">Experience the Voting Process</h2>
             <p className="text-muted-foreground">This is a non-binding simulation to help you understand how digital voting and counting works.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="Candidates">
             {demoCandidates.map((c) => {
               const count = votes[c.id] || 0;
               const percent = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
               
               return (
-                <Card key={c.id} className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden">
-                  <div className={`h-2 ${c.color}`} />
+                <Card key={c.id} className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden" role="listitem">
+                  <div className={`h-2 ${c.color}`} aria-hidden="true" />
                   <CardHeader>
                     <CardTitle className="text-lg">{c.name}</CardTitle>
                     <CardDescription>{c.party}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
+                    <div className="space-y-2" role="status" aria-atomic="true">
                       <div className="flex justify-between text-xs font-bold">
                         <span>LIVE COUNT</span>
                         <span>{count} Votes ({percent.toFixed(1)}%)</span>
                       </div>
-                      <Progress value={percent} className="h-2" />
+                      <Progress 
+                        value={percent} 
+                        className="h-2" 
+                        aria-label={`Vote percentage for ${c.name}: ${percent.toFixed(1)}%`}
+                      />
                     </div>
                     <Button 
                       className="w-full rounded-full gap-2 font-black" 
                       variant={hasVoted ? "secondary" : "default"}
                       disabled={hasVoted}
                       onClick={() => handleVote(c.id)}
+                      aria-label={hasVoted ? `Already voted for ${c.name}` : `Cast your vote for ${c.name}`}
                     >
-                      <Vote className="h-4 w-4" />
+                      <Vote className="h-4 w-4" aria-hidden="true" />
                       {hasVoted ? "Voted" : "Cast Vote"}
                     </Button>
                   </CardContent>

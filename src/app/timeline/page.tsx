@@ -23,10 +23,10 @@ export default function TimelinePage() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6" role="banner">
         <h1 className="text-xl font-headline font-bold text-accent">Key Dates & Timeline</h1>
       </header>
-      <main className="flex-1 overflow-y-auto custom-scrollbar p-6">
+      <main className="flex-1 overflow-y-auto custom-scrollbar p-6" role="main" aria-label="Election Timeline">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
@@ -35,9 +35,10 @@ export default function TimelinePage() {
             </div>
             <div className="w-full md:w-72">
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <Input 
                   placeholder="Filter by keyword..." 
+                  aria-label="Filter events by keyword"
                   className="pl-10"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
@@ -46,25 +47,28 @@ export default function TimelinePage() {
             </div>
           </div>
 
-          <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-border before:to-transparent">
+          <div 
+            className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-border before:to-transparent"
+            aria-live="polite"
+          >
             {filteredEvents.map((event, idx) => (
-              <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-primary bg-background shadow-lg shadow-primary/20 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform group-hover:scale-120">
+              <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group" role="article">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-primary bg-background shadow-lg shadow-primary/20 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform group-hover:scale-120" aria-hidden="true">
                   <Calendar className="h-5 w-5 text-primary" />
                 </div>
                 <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-border bg-card shadow-sm hover:border-accent/50 transition-colors">
                   <div className="flex items-center justify-between mb-2">
                     <time className="text-sm font-bold text-accent">{event.date}</time>
-                    <Badge variant={event.type === 'Deadline' ? 'destructive' : 'secondary'}>{event.type}</Badge>
+                    <Badge variant={event.type === 'Deadline' ? 'destructive' : 'secondary'} aria-label={`Event type: ${event.type}`}>{event.type}</Badge>
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-bold text-lg">{event.title}</h3>
                     <p className="text-sm text-muted-foreground">{event.desc}</p>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-border flex items-center gap-2 text-xs text-primary cursor-pointer hover:underline">
-                    <Bell className="h-3 w-3" />
+                  <button className="mt-4 pt-4 border-t border-border flex items-center gap-2 text-xs text-primary cursor-pointer hover:underline w-full text-left bg-transparent" aria-label={`Add ${event.title} to calendar`}>
+                    <Bell className="h-3 w-3" aria-hidden="true" />
                     <span>Add to calendar</span>
-                  </div>
+                  </button>
                 </div>
               </div>
             ))}

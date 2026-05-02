@@ -81,7 +81,7 @@ export function AppSidebar() {
     }
   };
 
-  const NavItem = ({ item }: { item: {title: string, url: string, icon: any} }) => (
+  const NavItem = ({ item }: { item: {title: string, url: string, icon: React.ElementType} }) => (
     <SidebarMenuItem>
       <SidebarMenuButton
         asChild
@@ -91,9 +91,10 @@ export function AppSidebar() {
           ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20" 
           : "text-[#495057] dark:text-gray-300 hover:bg-[#F1F3F5] dark:hover:bg-gray-800 font-bold"
         }`}
+        aria-label={`Navigate to ${item.title}`}
       >
         <Link href={item.url}>
-          <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} />
+          <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} aria-hidden="true" />
           <span className="font-black text-sm">{item.title}</span>
         </Link>
       </SidebarMenuButton>

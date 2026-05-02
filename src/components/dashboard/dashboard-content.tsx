@@ -202,10 +202,12 @@ export function DashboardContent() {
         </CardHeader>
         <CardContent className="p-0 h-full">
            <div className="w-full h-full bg-muted relative group">
-              <img 
+              <Image 
                 src="https://picsum.photos/seed/heatmap/1200/800" 
-                alt="Map Region" 
-                className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" 
+                alt="Interactive geographic heatmap showing voter turnout across Jawa Barat Region-1" 
+                fill
+                className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" 
+                unoptimized // Since it's a random picsum photo and we don't have remotePatterns set up yet
               />
               <div className="absolute top-1/2 left-1/3 h-48 w-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
               <div className="absolute top-1/4 left-1/2 h-32 w-32 bg-primary/30 rounded-full blur-2xl" />

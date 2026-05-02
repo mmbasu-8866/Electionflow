@@ -26,16 +26,16 @@ export default function RegionPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Map View */}
             <Card className="lg:col-span-2 rounded-[2.5rem] border shadow-sm overflow-hidden min-h-[500px] relative group">
-              <div className="absolute inset-0">
-                <img 
-                  src={pollingImage?.imageUrl || "https://picsum.photos/seed/map1/1200/800"} 
-                  alt="Regional Map" 
-                  className="w-full h-full object-cover opacity-80"
-                  data-ai-hint="map geography"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              </div>
-              <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
+               <div className="absolute inset-0">
+                 <Image
+                   src={pollingImage?.imageUrl || "https://picsum.photos/seed/map1/1200/800"}
+                   alt="Interactive regional map showing voting centers and live coverage for Jabar-1"
+                   fill
+                   className="object-cover opacity-80"
+                   unoptimized
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+               </div>              <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
                 <Badge className="bg-primary text-white text-xs px-3 py-1 rounded-full shadow-lg">Live Map View</Badge>
               </div>
               {/* Map Pins Overlay */}
