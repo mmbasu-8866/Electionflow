@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Vote, ChartBar, AlertCircle } from "lucide-react";
 import { useAuth } from "@/components/auth-provider";
-import { collection, addDoc, query, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
@@ -48,15 +48,24 @@ export default function SimulatorPage() {
     }
 
     try {
-      await addDoc(collection(db, "simulatedVotes"), {
-        candidateId,
-        userId: user.uid,
-        timestamp: serverTimestamp(),
+      const response = await fetch("/api/votes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ candidateId, userId: user.uid }),
       });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Vote request failed");
+      }
+
       setHasVoted(true);
       toast({ title: "Vote Cast!", description: "Your simulated vote has been recorded." });
     } catch (e) {
       console.error(e);
+      toast({ title: "Submission Failed", description: "Could not record your vote right now. Please try again." });
     }
   };
 
