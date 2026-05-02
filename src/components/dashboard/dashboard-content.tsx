@@ -12,6 +12,10 @@ import {
   Bot,
   Sparkles
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 import { 
   ResponsiveContainer, 
   XAxis, 
@@ -25,38 +29,41 @@ import {
   BarChart,
   Bar
 } from "recharts";
-import { Badge } from "@/components/ui/badge";
-import { VoterBotChatWidget } from "@/components/assistant/voter-bot-chat-widget";
-import Image from "next/image";
 
-const ageData = [
-  { age: "17-25", count: 2100 },
-  { age: "26-35", count: 3200 },
-  { age: "36-45", count: 2800 },
-  { age: "46-55", count: 3500 },
-  { age: "56+", count: 1800 },
-];
-
-const partyData = [
-  { name: "03 PDIP", votes: "851K", color: "#E31E24" },
-  { name: "12 PAN", votes: "656K", color: "#005BAA" },
-  { name: "15 PSI", votes: "194K", color: "#EF4444" },
-];
-
-const candidates = [
-  { name: "Ir. Hj. Rosinta W..", party: "PDIP", votes: "544K" },
-  { name: "Prof. Dr. Lukas S..", party: "PDIP", votes: "354K" },
-  { name: "Hj. Pramastia K..", party: "PAN", votes: "339K" },
-  { name: "Siti Nur Hadalika", party: "PSI", votes: "221K" },
-];
-
-const genderData = [
-  { name: "Male", value: 60, fill: "hsl(var(--primary))" },
-  { name: "Female", value: 40, fill: "hsl(var(--primary) / 0.3)" },
-];
+// Dynamically import heavy components
+const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bot-chat-widget").then(mod => mod.VoterBotChatWidget), {
+  ssr: false,
+  loading: () => <div className="h-[400px] flex items-center justify-center bg-muted/20 animate-pulse">Loading Assistant...</div>
+});
 
 export function DashboardContent() {
   const votePercentage = 85;
+
+  const ageData = useMemo(() => [
+    { age: "17-25", count: 2100 },
+    { age: "26-35", count: 3200 },
+    { age: "36-45", count: 2800 },
+    { age: "46-55", count: 3500 },
+    { age: "56+", count: 1800 },
+  ], []);
+
+  const partyData = useMemo(() => [
+    { name: "03 PDIP", votes: "851K", color: "#E31E24" },
+    { name: "12 PAN", votes: "656K", color: "#005BAA" },
+    { name: "15 PSI", votes: "194K", color: "#EF4444" },
+  ], []);
+
+  const candidates = useMemo(() => [
+    { name: "Ir. Hj. Rosinta W..", party: "PDIP", votes: "544K" },
+    { name: "Prof. Dr. Lukas S..", party: "PDIP", votes: "354K" },
+    { name: "Hj. Pramastia K..", party: "PAN", votes: "339K" },
+    { name: "Siti Nur Hadalika", party: "PSI", votes: "221K" },
+  ], []);
+
+  const genderData = useMemo(() => [
+    { name: "Male", value: 60, fill: "hsl(var(--primary))" },
+    { name: "Female", value: 40, fill: "hsl(var(--primary) / 0.3)" },
+  ], []);
 
   return (
     <div className="max-w-[1600px] mx-auto space-y-6 pb-12 animate-fade-in">
@@ -207,8 +214,9 @@ export function DashboardContent() {
                 src="https://picsum.photos/seed/heatmap/1200/800" 
                 alt="Interactive geographic heatmap showing voter turnout across Jawa Barat Region-1" 
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 1000px"
                 className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" 
-                unoptimized // Since it's a random picsum photo and we don't have remotePatterns set up yet
+                unoptimized
               />
               <div className="absolute top-1/2 left-1/3 h-48 w-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
               <div className="absolute top-1/4 left-1/2 h-32 w-32 bg-primary/30 rounded-full blur-2xl" />
@@ -219,8 +227,8 @@ export function DashboardContent() {
                 </div>
               </div>
               <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border">+</Button>
-                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border">-</Button>
+                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border" aria-label="Zoom in map">+</Button>
+                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border" aria-label="Zoom out map">-</Button>
               </div>
            </div>
         </CardContent>

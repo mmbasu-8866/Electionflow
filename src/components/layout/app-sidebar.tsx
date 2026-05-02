@@ -106,7 +106,10 @@ export function AppSidebar() {
       <SidebarHeader className="p-6">
         <div className="flex items-center gap-3 mb-6">
           <Avatar className="h-12 w-12 border-2 border-primary ring-2 ring-primary/20 ring-offset-2">
-            <AvatarImage src={user?.photoURL || "https://picsum.photos/seed/rio/100"} />
+            <AvatarImage 
+              src={user?.photoURL || "https://picsum.photos/seed/rio/100"} 
+              alt={user?.displayName || "Guest"}
+            />
             <AvatarFallback className="font-black">{user?.displayName?.charAt(0) || "E"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col overflow-hidden">
@@ -158,6 +161,7 @@ export function AppSidebar() {
         <SidebarMenuButton 
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="h-11 px-4 text-foreground font-bold hover:bg-secondary rounded-xl transition-colors"
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span className="font-black text-sm">{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>

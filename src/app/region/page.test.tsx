@@ -4,7 +4,7 @@ import { expect, test, vi } from 'vitest'
 
 // Mock the GoogleMap component to avoid js-api-loader issues in vitest
 vi.mock('@/components/ui/google-map', () => ({
-  GoogleMap: ({ className }: any) => <div data-testid="mock-google-map" className={className} />
+  GoogleMap: ({ className }: { className?: string }) => <div data-testid="mock-google-map" className={className} />
 }))
 
 test('renders region page', () => {

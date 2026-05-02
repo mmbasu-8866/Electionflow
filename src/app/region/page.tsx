@@ -48,14 +48,18 @@ export default function RegionPage() {
             {/* Centers List */}
             <div className="space-y-6">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search centers..." className="pl-10 h-12 rounded-2xl bg-card border-muted" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <Input 
+                  placeholder="Search centers..." 
+                  aria-label="Search voting centers by name or address"
+                  className="pl-10 h-12 rounded-2xl bg-card border-muted" 
+                />
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-4" role="region" aria-label="Local Voting Centers List">
                 <h3 className="font-bold text-lg text-primary px-2">Local Voting Centers</h3>
                 {votingCenters.map((center) => (
-                  <Card key={center.id} className="rounded-3xl border hover:border-primary/50 transition-all group cursor-pointer">
+                  <Card key={center.id} className="rounded-3xl border hover:border-primary/50 transition-all group cursor-pointer" role="listitem">
                     <CardContent className="p-5 flex items-start gap-4">
                       <div className="h-12 w-12 rounded-2xl bg-secondary flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
                         <Navigation className="h-6 w-6 text-primary" />

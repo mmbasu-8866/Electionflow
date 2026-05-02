@@ -4,10 +4,10 @@ import { expect, test, vi } from 'vitest'
 
 // Mock recharts
 vi.mock('recharts', () => ({
-  ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
-  PieChart: ({ children }: any) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  PieChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Pie: () => <div />,
-  BarChart: ({ children }: any) => <div>{children}</div>,
+  BarChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Bar: () => <div />,
   XAxis: () => <div />,
   YAxis: () => <div />,
@@ -16,9 +16,10 @@ vi.mock('recharts', () => ({
   Label: () => <div />,
 }))
 
-test('renders population page', () => {
+test('renders population page', async () => {
   render(<PopulationPage />)
   expect(screen.getByText('Population & Voter Data')).toBeInTheDocument()
   expect(screen.getByText('Total Population')).toBeInTheDocument()
   expect(screen.getByText('5.8M')).toBeInTheDocument()
+  // Wait for dynamic charts if needed, although they are mocked
 })

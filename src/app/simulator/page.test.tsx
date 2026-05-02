@@ -14,9 +14,14 @@ vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(),
 }))
 
+import { User } from 'firebase/auth'
+
 describe('SimulatorPage', () => {
   beforeEach(() => {
-    vi.mocked(useAuth).mockReturnValue({ user: { uid: '123' } } as any)
+    vi.mocked(useAuth).mockReturnValue({ 
+      user: { uid: '123' } as User, 
+      loading: false 
+    })
   })
 
   test('renders simulator page', () => {

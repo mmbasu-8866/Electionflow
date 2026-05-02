@@ -10,18 +10,19 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
-
-const demoCandidates = [
-  { id: "c1", name: "Modern Progressive Alliance", party: "MPA", color: "bg-blue-500" },
-  { id: "c2", name: "Traditional Values Party", party: "TVP", color: "bg-red-500" },
-  { id: "c3", name: "Green Future Initiative", party: "GFI", color: "bg-green-500" },
-];
+import { useMemo, useCallback } from "react";
 
 export default function SimulatorPage() {
   const { user } = useAuth();
   const [votes, setVotes] = useState<Record<string, number>>({});
   const [hasVoted, setHasVoted] = useState(false);
   const [totalVotes, setTotalVotes] = useState(0);
+
+  const demoCandidates = useMemo(() => [
+    { id: "c1", name: "Modern Progressive Alliance", party: "MPA", color: "bg-blue-500" },
+    { id: "c2", name: "Traditional Values Party", party: "TVP", color: "bg-red-500" },
+    { id: "c3", name: "Green Future Initiative", party: "GFI", color: "bg-green-500" },
+  ], []);
 
   useEffect(() => {
     const q = query(collection(db, "simulatedVotes"));
@@ -37,7 +38,7 @@ export default function SimulatorPage() {
     return () => unsubscribe();
   }, []);
 
-  const handleVote = async (candidateId: string) => {
+  const handleVote = useCallback(async (candidateId: string) => {
     if (!user) {
       toast({ title: "Auth Required", description: "Please sign in to participate in the simulation.", variant: "destructive" });
       return;
@@ -67,7 +68,7 @@ export default function SimulatorPage() {
       console.error(e);
       toast({ title: "Submission Failed", description: "Could not record your vote right now. Please try again." });
     }
-  };
+  }, [user, hasVoted]);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">

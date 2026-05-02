@@ -19,20 +19,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RefreshCcw, MapPin, ChevronDown, Search } from "lucide-react";
-
-const partyData = [
-  { id: "01", name: "03 PDI-P", fullName: "Partai Demokrasi Indonesia Perjuangan", votes: "851.468", percentage: 35, color: "#E31E24", region: "Jabar-1" },
-  { id: "02", name: "12 PAN", fullName: "Partai Amanat Nasional", votes: "656.846", percentage: 27, color: "#005BAA", region: "Jabar-1" },
-  { id: "03", name: "15 PSI", fullName: "Partai Solidaritas Indonesia", votes: "194.621", percentage: 8, color: "#EF4444", region: "Jabar-1" },
-  { id: "04", name: "04 Golkar", fullName: "Partai Golongan Karya", votes: "121.638", percentage: 5, color: "#FFD700", region: "Jabar-1" },
-  { id: "05", name: "02 Gerindra", fullName: "Partai Gerakan Indonesia", votes: "97.310", percentage: 4, color: "#B22222", region: "Jabar-1" },
-  { id: "06", name: "05 Nasdem", fullName: "Partai Nasional Demokrasi", votes: "96.887", percentage: 4, color: "#004A99", region: "Jabar-1" },
-  { id: "07", name: "14 Demokrat", fullName: "Partai Demokrat", votes: "72.983", percentage: 3, color: "#005BAA", region: "Jabar-1" },
-  { id: "08", name: "17 PPP", fullName: "Partai Persatuan Pembangunan", votes: "72.665", percentage: 3, color: "#008000", region: "Jabar-1" },
-  { id: "09", name: "08 PKS", fullName: "Partai Keadilan Sosial", votes: "48.655", percentage: 2, color: "#FE5000", region: "Jabar-1" },
-];
+import { useMemo } from "react";
 
 export default function PartyCandidatesPage() {
+  const partyData = useMemo(() => [
+    { id: "01", name: "03 PDI-P", fullName: "Partai Demokrasi Indonesia Perjuangan", votes: "851.468", percentage: 35, color: "#E31E24", region: "Jabar-1" },
+    { id: "02", name: "12 PAN", fullName: "Partai Amanat Nasional", votes: "656.846", percentage: 27, color: "#005BAA", region: "Jabar-1" },
+    { id: "03", name: "15 PSI", fullName: "Partai Solidaritas Indonesia", votes: "194.621", percentage: 8, color: "#EF4444", region: "Jabar-1" },
+    { id: "04", name: "04 Golkar", fullName: "Partai Golongan Karya", votes: "121.638", percentage: 5, color: "#FFD700", region: "Jabar-1" },
+    { id: "05", name: "02 Gerindra", fullName: "Partai Gerakan Indonesia", votes: "97.310", percentage: 4, color: "#B22222", region: "Jabar-1" },
+    { id: "06", name: "05 Nasdem", fullName: "Partai Nasional Demokrasi", votes: "96.887", percentage: 4, color: "#004A99", region: "Jabar-1" },
+    { id: "07", name: "14 Demokrat", fullName: "Partai Demokrat", votes: "72.983", percentage: 3, color: "#005BAA", region: "Jabar-1" },
+    { id: "08", name: "17 PPP", fullName: "Partai Persatuan Pembangunan", votes: "72.665", percentage: 3, color: "#008000", region: "Jabar-1" },
+    { id: "09", name: "08 PKS", fullName: "Partai Keadilan Sosial", votes: "48.655", percentage: 2, color: "#FE5000", region: "Jabar-1" },
+  ], []);
+
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Top Header Bar */}
@@ -75,11 +76,15 @@ export default function PartyCandidatesPage() {
               {/* Filter Bar */}
               <div className="mt-8 flex items-center gap-4 p-2 bg-background rounded-2xl border border-dashed border-muted-foreground/20">
                 <div className="flex items-center bg-card rounded-xl px-3 flex-1 border">
-                  <Search className="h-4 w-4 text-muted-foreground mr-2" />
-                  <Input placeholder="Pick Party" className="border-none shadow-none focus-visible:ring-0" />
+                  <Search className="h-4 w-4 text-muted-foreground mr-2" aria-hidden="true" />
+                  <Input 
+                    placeholder="Pick Party" 
+                    aria-label="Search party by name"
+                    className="border-none shadow-none focus-visible:ring-0" 
+                  />
                 </div>
-                <Select>
-                  <SelectTrigger className="w-48 rounded-xl bg-card border">
+                <Select aria-label="Sort by order">
+                  <SelectTrigger className="w-48 rounded-xl bg-card border" aria-label="Select sort order">
                     <SelectValue placeholder="Orderal" />
                   </SelectTrigger>
                   <SelectContent>

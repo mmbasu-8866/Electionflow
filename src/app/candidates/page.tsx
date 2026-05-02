@@ -20,17 +20,18 @@ import {
 } from "@/components/ui/select";
 import { RefreshCcw, MapPin, ChevronDown, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-const candidateData = [
-  { id: "01", name: "Ir. Hj. Rosinta Widowati", party: "PDI-P", votes: "544.120", percentage: 22, region: "Jabar-1", icon: "RW" },
-  { id: "02", name: "Prof. Dr. Lukas Sembiring", party: "PDI-P", votes: "354.800", percentage: 15, region: "Jabar-1", icon: "LS" },
-  { id: "03", name: "Hj. Pramastia Kusuma", party: "PAN", votes: "339.210", percentage: 14, region: "Jabar-1", icon: "PK" },
-  { id: "04", name: "Siti Nur Hadalika", party: "PSI", votes: "221.440", percentage: 9, region: "Jabar-1", icon: "SN" },
-  { id: "05", name: "Budi Santoso", party: "Demokrat", votes: "156.000", percentage: 6, region: "Jabar-1", icon: "BS" },
-  { id: "06", name: "Anisa Rahma", party: "Golkar", votes: "142.300", percentage: 6, region: "Jabar-1", icon: "AR" },
-];
+import { useMemo } from "react";
 
 export default function CandidatesPage() {
+  const candidateData = useMemo(() => [
+    { id: "01", name: "Ir. Hj. Rosinta Widowati", party: "PDI-P", votes: "544.120", percentage: 22, region: "Jabar-1", icon: "RW" },
+    { id: "02", name: "Prof. Dr. Lukas Sembiring", party: "PDI-P", votes: "354.800", percentage: 15, region: "Jabar-1", icon: "LS" },
+    { id: "03", name: "Hj. Pramastia Kusuma", party: "PAN", votes: "339.210", percentage: 14, region: "Jabar-1", icon: "PK" },
+    { id: "04", name: "Siti Nur Hadalika", party: "PSI", votes: "221.440", percentage: 9, region: "Jabar-1", icon: "SN" },
+    { id: "05", name: "Budi Santoso", party: "Demokrat", votes: "156.000", percentage: 6, region: "Jabar-1", icon: "BS" },
+    { id: "06", name: "Anisa Rahma", party: "Golkar", votes: "142.300", percentage: 6, region: "Jabar-1", icon: "AR" },
+  ], []);
+
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Top Header Bar */}
@@ -73,11 +74,15 @@ export default function CandidatesPage() {
               {/* Filter Bar */}
               <div className="mt-8 flex items-center gap-4 p-2 bg-background rounded-2xl border border-dashed border-muted-foreground/20">
                 <div className="flex items-center bg-card rounded-xl px-3 flex-1 border">
-                  <Search className="h-4 w-4 text-muted-foreground mr-2" />
-                  <Input placeholder="Search Candidates" className="border-none shadow-none focus-visible:ring-0" />
+                  <Search className="h-4 w-4 text-muted-foreground mr-2" aria-hidden="true" />
+                  <Input 
+                    placeholder="Search Candidates" 
+                    aria-label="Search candidates by name"
+                    className="border-none shadow-none focus-visible:ring-0" 
+                  />
                 </div>
-                <Select>
-                  <SelectTrigger className="w-48 rounded-xl bg-card border">
+                <Select aria-label="Filter by party">
+                  <SelectTrigger className="w-48 rounded-xl bg-card border" aria-label="Select party filter">
                     <SelectValue placeholder="Party" />
                   </SelectTrigger>
                   <SelectContent>

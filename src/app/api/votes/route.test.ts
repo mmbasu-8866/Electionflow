@@ -14,6 +14,8 @@ vi.mock('@/lib/firebase-server', () => ({
   serverDb: {},
 }))
 
+import { DocumentReference } from 'firebase/firestore'
+
 describe('POST /api/votes', () => {
   it('returns 400 if candidateId is missing', async () => {
     const request = new Request('http://localhost/api/votes', {
@@ -27,7 +29,7 @@ describe('POST /api/votes', () => {
   })
 
   it('saves a vote and returns ok', async () => {
-    vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as any)
+    vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as DocumentReference)
     const request = new Request('http://localhost/api/votes', {
       method: 'POST',
       body: JSON.stringify({ candidateId: 'cand1', userId: 'user1' }),
@@ -37,6 +39,18 @@ describe('POST /api/votes', () => {
     expect(response.status).toBe(200)
     expect(data.ok).toBe(true)
     expect(addDoc).toHaveBeenCalled()
+  })
+
+  it('saves a vote with null userId', async () => {
+    vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as any)
+    const request = new Request('http://localhost/api/votes', {
+      method: 'POST',
+      body: JSON.stringify({ candidateId: 'cand1' }),
+    })
+    const response = await POST(request)
+    const data = await response.json()
+    expect(response.status).toBe(200)
+    expect(data.ok).toBe(true)
   })
 
   it('returns 500 on error', async () => {

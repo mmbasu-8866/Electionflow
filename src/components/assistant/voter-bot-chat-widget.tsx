@@ -114,7 +114,7 @@ export function VoterBotChatWidget() {
             </div>
           ))}
           {isLoading && (
-            <div className="flex gap-3" role="status">
+            <div className="flex gap-3" role="status" aria-live="polite">
               <div className="h-8 w-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center shrink-0" aria-hidden="true">
                 <Loader2 className="h-4 w-4 animate-spin" />
               </div>
