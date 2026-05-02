@@ -4,6 +4,6 @@ import { expect, test } from 'vitest'
 
 test('renders party candidates page', () => {
   render(<PartyCandidatesPage />)
-  expect(screen.getByText('Vote Recapitulation - Party')).toBeInTheDocument()
-  expect(screen.getByText('03 PDI-P')).toBeInTheDocument()
+  expect(screen.getByText('Vote Recapitulation - Parties')).toBeInTheDocument()
+  expect(screen.getByText('PDI-P')).toBeInTheDocument()
 })

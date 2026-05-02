@@ -1,149 +1,84 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RefreshCcw, MapPin, ChevronDown, Search } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts";
+import { PageContainer } from "@/components/layout/page-container";
 
+/**
+ * PartyCandidatesPage - Recapitulation of votes by political party.
+ */
 export default function PartyCandidatesPage() {
   const partyData = useMemo(() => [
-    { id: "01", name: "03 PDI-P", fullName: "Partai Demokrasi Indonesia Perjuangan", votes: "851.468", percentage: 35, color: "#E31E24", region: "Jabar-1" },
-    { id: "02", name: "12 PAN", fullName: "Partai Amanat Nasional", votes: "656.846", percentage: 27, color: "#005BAA", region: "Jabar-1" },
-    { id: "03", name: "15 PSI", fullName: "Partai Solidaritas Indonesia", votes: "194.621", percentage: 8, color: "#EF4444", region: "Jabar-1" },
-    { id: "04", name: "04 Golkar", fullName: "Partai Golongan Karya", votes: "121.638", percentage: 5, color: "#FFD700", region: "Jabar-1" },
-    { id: "05", name: "02 Gerindra", fullName: "Partai Gerakan Indonesia", votes: "97.310", percentage: 4, color: "#B22222", region: "Jabar-1" },
-    { id: "06", name: "05 Nasdem", fullName: "Partai Nasional Demokrasi", votes: "96.887", percentage: 4, color: "#004A99", region: "Jabar-1" },
-    { id: "07", name: "14 Demokrat", fullName: "Partai Demokrat", votes: "72.983", percentage: 3, color: "#005BAA", region: "Jabar-1" },
-    { id: "08", name: "17 PPP", fullName: "Partai Persatuan Pembangunan", votes: "72.665", percentage: 3, color: "#008000", region: "Jabar-1" },
-    { id: "09", name: "08 PKS", fullName: "Partai Keadilan Sosial", votes: "48.655", percentage: 2, color: "#FE5000", region: "Jabar-1" },
+    { name: "PDI-P", votes: 851000, color: "#E31E24" },
+    { name: "PAN", votes: 656000, color: "#005BAA" },
+    { name: "PSI", votes: 194000, color: "#EF4444" },
+    { name: "Demokrat", votes: 156000, color: "#0072BC" },
+    { name: "Golkar", votes: 142000, color: "#FFFF00" },
+    { name: "PKS", votes: 98000, color: "#F7941E" },
   ], []);
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      {/* Top Header Bar */}
-      <header className="flex h-16 shrink-0 items-center justify-between border-b bg-card px-6 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-muted px-4 py-2 rounded-2xl border shadow-sm cursor-pointer">
-            <MapPin className="h-4 w-4 text-primary" />
-            <span className="text-sm font-bold">Daerah Pemilihan Jawa Barat Region-1</span>
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="flex flex-col text-right">
-            <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Last Update</span>
-            <span className="text-sm font-black">02:35 PM</span>
-          </div>
-          <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 h-10 gap-2 shadow-lg shadow-primary/20">
-            <RefreshCcw className="h-4 w-4" />
-            <span>Refresh</span>
-          </Button>
-        </div>
-      </header>
-
-      <main className="flex-1 overflow-y-auto custom-scrollbar p-8">
-        <div className="max-w-[1400px] mx-auto space-y-6">
-          <h2 className="text-2xl font-black text-foreground">Vote Recapitulation - Party</h2>
-
-          {/* Total Votes Card */}
-          <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-card">
-            <CardContent className="p-8">
-              <div className="space-y-1">
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Last Updates 02.35 PM</span>
-                <div className="flex items-baseline gap-4">
-                  <h3 className="text-3xl font-black text-foreground">Total Votes Received</h3>
-                  <span className="text-4xl font-black text-primary">2.432.766</span>
-                  <span className="text-sm font-bold text-muted-foreground">Votes</span>
-                </div>
-              </div>
-
-              {/* Filter Bar */}
-              <div className="mt-8 flex items-center gap-4 p-2 bg-background rounded-2xl border border-dashed border-muted-foreground/20">
-                <div className="flex items-center bg-card rounded-xl px-3 flex-1 border">
-                  <Search className="h-4 w-4 text-muted-foreground mr-2" aria-hidden="true" />
-                  <Input 
-                    placeholder="Pick Party" 
-                    aria-label="Search party by name"
-                    className="border-none shadow-none focus-visible:ring-0" 
+    <PageContainer title="Vote Recapitulation - Parties">
+      <h2 className="sr-only">Party Standings</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2 rounded-[2.5rem] border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-xl font-black">Party Vote Distribution</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[500px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={partyData} layout="vertical" margin={{ left: 20, right: 40 }}>
+                  <XAxis type="number" hide />
+                  <YAxis 
+                    dataKey="name" 
+                    type="category" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 12, fontWeight: 'bold' }}
+                    width={100}
                   />
-                </div>
-                <Select aria-label="Sort by order">
-                  <SelectTrigger className="w-48 rounded-xl bg-card border" aria-label="Select sort order">
-                    <SelectValue placeholder="Orderal" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="desc">Highest Votes</SelectItem>
-                    <SelectItem value="asc">Lowest Votes</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button variant="outline" className="rounded-xl px-8 border-primary text-primary hover:bg-primary/5 font-bold">Apply</Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <Tooltip 
+                    cursor={{ fill: 'transparent' }}
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                    formatter={(value: number) => [new Intl.NumberFormat().format(value) + " Votes", "Count"]}
+                  />
+                  <Bar dataKey="votes" radius={[0, 10, 10, 0]} barSize={40}>
+                    {partyData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Table Card */}
-          <Card className="rounded-3xl border-none shadow-sm overflow-hidden bg-card">
-            <Table>
-              <TableHeader className="bg-muted">
-                <TableRow className="hover:bg-transparent border-none">
-                  <TableHead className="w-24 font-black text-muted-foreground uppercase text-[10px] px-8">Orderal</TableHead>
-                  <TableHead className="w-32 font-black text-muted-foreground uppercase text-[10px]">Party Logo</TableHead>
-                  <TableHead className="font-black text-muted-foreground uppercase text-[10px]">Vote Recapitulation</TableHead>
-                  <TableHead className="w-48 font-black text-muted-foreground uppercase text-[10px] text-right">Total Votes</TableHead>
-                  <TableHead className="w-32 font-black text-muted-foreground uppercase text-[10px] text-right px-8">Region</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {partyData.map((party) => (
-                  <TableRow key={party.id} className="group border-b border-border last:border-none">
-                    <TableCell className="font-black text-lg text-foreground px-8">{party.id}</TableCell>
-                    <TableCell>
-                      <div className="h-12 w-12 rounded-xl border bg-background flex items-center justify-center p-2 shadow-sm group-hover:scale-105 transition-transform">
-                        <div className="h-full w-full rounded-full" style={{ backgroundColor: party.color }} />
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex flex-col">
-                            <span className="font-black text-foreground">{party.name}</span>
-                            <span className="text-[10px] font-bold text-muted-foreground">{party.fullName}</span>
-                          </div>
-                          <span className="font-black text-sm text-foreground">{party.percentage}%</span>
-                        </div>
-                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000" 
-                            style={{ width: `${party.percentage}%` }} 
-                          />
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right font-black text-foreground">{party.votes}</TableCell>
-                    <TableCell className="text-right font-bold text-muted-foreground px-8">{party.region}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+        <div className="space-y-6">
+          <h3 className="text-xl font-bold px-2 text-primary">Live Standings</h3>
+          {partyData.map((party, i) => (
+            <Card key={i} className="rounded-3xl border shadow-sm hover:shadow-md transition-all group overflow-hidden">
+              <CardContent className="p-0">
+                <div className="flex items-center gap-4 p-5">
+                  <div className="h-12 w-12 rounded-2xl border flex items-center justify-center p-2 bg-white shadow-sm">
+                    <div className="h-full w-full rounded-full" style={{ backgroundColor: party.color }} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-lg">{party.name}</h4>
+                      <Badge variant="secondary" className="font-black text-[10px]">{i + 1}ST</Badge>
+                    </div>
+                    <p className="text-sm font-black text-primary">{new Intl.NumberFormat().format(party.votes)} <span className="text-muted-foreground text-xs font-bold uppercase">Votes</span></p>
+                  </div>
+                </div>
+                <div className="h-1 w-full opacity-20" style={{ backgroundColor: party.color }} />
+              </CardContent>
+            </Card>
+          ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </PageContainer>
   );
 }

@@ -1,37 +1,19 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import GuidesPage from './page'
 import { expect, test } from 'vitest'
 
-test('renders guides page and tabs', () => {
+test('renders guides page and instructions', () => {
   render(<GuidesPage />)
-  expect(screen.getByText('Step-by-Step Election Instructions')).toBeInTheDocument()
+  expect(screen.getByText('How to Vote: A Step-by-Step Guide')).toBeInTheDocument()
   
-  // Check that both tabs are present
-  expect(screen.getByRole('tab', { name: /registration/i })).toBeInTheDocument()
-  expect(screen.getByRole('tab', { name: /casting ballot/i })).toBeInTheDocument()
+  // Check that accordion items are present
+  expect(screen.getByText('Voter Registration')).toBeInTheDocument()
+  expect(screen.getByText('Research Candidates')).toBeInTheDocument()
+  expect(screen.getByText('Locate Your Polling Place')).toBeInTheDocument()
+  expect(screen.getByText('Cast Your Ballot')).toBeInTheDocument()
 })
 
-test('navigates through registration steps', () => {
+test('renders additional help card', () => {
   render(<GuidesPage />)
-  const nextButton = screen.getByRole('button', { name: /next step/i })
-  
-  // Initially at step 0
-  // Check the heading in the card specifically (now h3)
-  expect(screen.getByRole('heading', { name: 'Check Eligibility', level: 3 })).toBeInTheDocument()
-  
-  fireEvent.click(nextButton)
-  // Now at step 1
-  expect(screen.getByRole('heading', { name: 'Gather Documents', level: 3 })).toBeInTheDocument()
-  
-  const prevButton = screen.getByRole('button', { name: /previous step/i })
-  fireEvent.click(prevButton)
-  // Back to step 0
-  expect(screen.getByRole('heading', { name: 'Check Eligibility', level: 3 })).toBeInTheDocument()
-})
-
-test('switches to voting tab', async () => {
-  render(<GuidesPage />)
-  const votingTab = screen.getByRole('tab', { name: /casting ballot/i })
-  expect(votingTab).toBeInTheDocument()
-  // Skip deep tab content check due to Radix test environment complexities
+  expect(screen.getByText('Still have questions?')).toBeInTheDocument()
 })

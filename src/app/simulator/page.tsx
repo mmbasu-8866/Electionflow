@@ -1,17 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Vote, ChartBar, AlertCircle } from "lucide-react";
 import { useAuth } from "@/components/auth-provider";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
-import { useMemo, useCallback } from "react";
+import { PageContainer } from "@/components/layout/page-container";
 
+/**
+ * SimulatorPage - Mock voting tool to demonstrate the logic of digital counting.
+ */
 export default function SimulatorPage() {
   const { user } = useAuth();
   const [votes, setVotes] = useState<Record<string, number>>({});
@@ -25,7 +28,8 @@ export default function SimulatorPage() {
   ], []);
 
   useEffect(() => {
-    const q = query(collection(db, "simulatedVotes"));
+    // Limit results for efficiency in the simulation
+    const q = query(collection(db, "simulatedVotes"), limit(1000));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const counts: Record<string, number> = {};
       snapshot.forEach((doc) => {
@@ -71,80 +75,75 @@ export default function SimulatorPage() {
   }, [user, hasVoted]);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-background">
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-card" role="banner">
-        <h1 className="text-xl font-headline font-bold text-accent">Mock Voting Simulator</h1>
-      </header>
-      <main className="flex-1 overflow-y-auto p-6 space-y-8" role="main" aria-label="Voting Simulation Tool">
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
-          <div className="space-y-2 text-center">
-            <Badge variant="secondary" className="mb-2" aria-label="Experimental Feature Notice">Experimental Feature</Badge>
-            <h2 className="text-4xl font-black">Experience the Voting Process</h2>
-            <p className="text-muted-foreground">This is a non-binding simulation to help you understand how digital voting and counting works.</p>
-          </div>
+    <PageContainer title="Mock Voting Simulator">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="space-y-2 text-center">
+          <Badge variant="secondary" className="mb-2" aria-label="Experimental Feature Notice">Experimental Feature</Badge>
+          <h2 className="text-4xl font-black">Experience the Voting Process</h2>
+          <p className="text-muted-foreground">This is a non-binding simulation to help you understand how digital voting and counting works.</p>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="Candidates">
-            {demoCandidates.map((c) => {
-              const count = votes[c.id] || 0;
-              const percent = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
-              
-              return (
-                <Card key={c.id} className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden" role="listitem">
-                  <div className={`h-2 ${c.color}`} aria-hidden="true" />
-                  <CardHeader>
-                    <CardTitle className="text-lg">{c.name}</CardTitle>
-                    <CardDescription>{c.party}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2" role="status" aria-atomic="true">
-                      <div className="flex justify-between text-xs font-bold">
-                        <span>LIVE COUNT</span>
-                        <span>{count} Votes ({percent.toFixed(1)}%)</span>
-                      </div>
-                      <Progress 
-                        value={percent} 
-                        className="h-2" 
-                        aria-label={`Vote percentage for ${c.name}: ${percent.toFixed(1)}%`}
-                      />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" role="list" aria-label="Candidates">
+          {demoCandidates.map((c) => {
+            const count = votes[c.id] || 0;
+            const percent = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
+            
+            return (
+              <Card key={c.id} className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden" role="listitem">
+                <div className={`h-2 ${c.color}`} aria-hidden="true" />
+                <CardHeader>
+                  <CardTitle className="text-lg">{c.name}</CardTitle>
+                  <CardDescription>{c.party}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2" role="status" aria-atomic="true">
+                    <div className="flex justify-between text-xs font-bold">
+                      <span>LIVE COUNT</span>
+                      <span>{count} Votes ({percent.toFixed(1)}%)</span>
                     </div>
-                    <Button 
-                      className="w-full rounded-full gap-2 font-black" 
-                      variant={hasVoted ? "secondary" : "default"}
-                      disabled={hasVoted}
-                      onClick={() => handleVote(c.id)}
-                      aria-label={hasVoted ? `Already voted for ${c.name}` : `Cast your vote for ${c.name}`}
-                    >
-                      <Vote className="h-4 w-4" aria-hidden="true" />
-                      {hasVoted ? "Voted" : "Cast Vote"}
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    <Progress 
+                      value={percent} 
+                      className="h-2" 
+                      aria-label={`Vote percentage for ${c.name}: ${percent.toFixed(1)}%`}
+                    />
+                  </div>
+                  <Button 
+                    className="w-full rounded-full gap-2 font-black" 
+                    variant={hasVoted ? "secondary" : "default"}
+                    disabled={hasVoted}
+                    onClick={() => handleVote(c.id)}
+                    aria-label={hasVoted ? `Already voted for ${c.name}` : `Cast your vote for ${c.name}`}
+                  >
+                    <Vote className="h-4 w-4" aria-hidden="true" />
+                    {hasVoted ? "Voted" : "Cast Vote"}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
-          <Card className="rounded-[2.5rem] bg-primary/5 border-primary/20">
-            <CardContent className="p-8 flex flex-col md:flex-row items-center gap-6">
-              <div className="h-16 w-16 rounded-3xl bg-primary text-white flex items-center justify-center shrink-0">
-                <ChartBar className="h-8 w-8" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-black">Real-time Visualization</h3>
-                <p className="text-sm text-muted-foreground">
-                  Our platform uses Firebase real-time listeners. As soon as a user clicks &quot;Cast Vote&quot;, the results update instantly for everyone connected to the dashboard.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="bg-muted p-6 rounded-3xl border border-dashed flex items-start gap-4">
-            <AlertCircle className="h-6 w-6 text-primary shrink-0 mt-1" />
-            <div className="text-sm">
-              <span className="font-bold">Security Notice:</span> In a real election, votes are encrypted and anonymized. This simulator demonstrates the logic of counting, not the full cryptographic security of official ballot systems.
+        <Card className="rounded-[2.5rem] bg-primary/5 border-primary/20">
+          <CardContent className="p-8 flex flex-col md:flex-row items-center gap-6">
+            <div className="h-16 w-16 rounded-3xl bg-primary text-white flex items-center justify-center shrink-0">
+              <ChartBar className="h-8 w-8" />
             </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-black">Real-time Visualization</h3>
+              <p className="text-sm text-muted-foreground">
+                Our platform uses Firebase real-time listeners. As soon as a user clicks &quot;Cast Vote&quot;, the results update instantly for everyone connected to the dashboard.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="bg-muted p-6 rounded-3xl border border-dashed flex items-start gap-4">
+          <AlertCircle className="h-6 w-6 text-primary shrink-0 mt-1" />
+          <div className="text-sm">
+            <span className="font-bold">Security Notice:</span> In a real election, votes are encrypted and anonymized. This simulator demonstrates the logic of counting, not the full cryptographic security of official ballot systems.
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </PageContainer>
   );
 }

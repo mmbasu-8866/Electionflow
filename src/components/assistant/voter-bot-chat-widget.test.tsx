@@ -77,4 +77,45 @@ describe('VoterBotChatWidget', () => {
 
     expect(input.value).toBe('')
   })
+
+  it('handles image selection and removal', async () => {
+    // Mock URL.createObjectURL and revokeObjectURL
+    global.URL.createObjectURL = vi.fn(() => 'blob:mock-url')
+    global.URL.revokeObjectURL = vi.fn()
+
+    render(<VoterBotChatWidget />)
+    
+    const attachButton = screen.getByLabelText(/Attach image/i)
+    fireEvent.click(attachButton)
+
+    // Find the hidden file input
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(['hello'], 'hello.png', { type: 'image/png' })
+    fireEvent.change(fileInput, { target: { files: [file] } })
+
+    // Preview should appear
+    await waitFor(() => {
+      expect(screen.getByAltText(/Preview/i)).toBeInTheDocument()
+    })
+
+    // Remove the image
+    const removeButton = screen.getByLabelText(/Remove attached image/i)
+    fireEvent.click(removeButton)
+
+    expect(screen.queryByAltText(/Preview/i)).not.toBeInTheDocument()
+  })
+
+  it('prevents large image uploads', () => {
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {})
+    render(<VoterBotChatWidget />)
+    
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    const largeFile = new File([''], 'large.png', { type: 'image/png' })
+    Object.defineProperty(largeFile, 'size', { value: 6 * 1024 * 1024 }) // 6MB
+    
+    fireEvent.change(fileInput, { target: { files: [largeFile] } })
+    
+    expect(alertMock).toHaveBeenCalledWith('Image too large. Please select a file under 5MB.')
+    alertMock.mockRestore()
+  })
 })

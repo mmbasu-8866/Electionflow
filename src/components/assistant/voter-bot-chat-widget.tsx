@@ -1,8 +1,6 @@
-
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { electionProcessChat } from "@/ai/flows/election-process-chat";
+import { useVoterBot } from "@/hooks/use-voter-bot";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,73 +10,27 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
-type Message = {
-  role: "user" | "bot";
-  content: string;
-  image?: string;
-};
-
+/**
+ * VoterBotChatWidget - High-level UI component for the AI Election Assistant.
+ * Uses the useVoterBot custom hook for logic abstraction.
+ */
 export function VoterBotChatWidget() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", content: "Hello! I'm Electionflow. How can I help you today? I can also explain things simply for kids!" }
-  ]);
-  const [input, setInput] = useState("");
-  const [location, setLocation] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEli10, setIsEli10] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-  }, [messages]);
-
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Image too large. Please select a file under 5MB.");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if ((!input.trim() && !selectedImage) || isLoading) return;
-
-    const userMessage = input;
-    const userImage = selectedImage;
-    setInput("");
-    setSelectedImage(null);
-    setMessages(prev => [...prev, { role: "user", content: userMessage, image: userImage || undefined }]);
-    setIsLoading(true);
-
-    try {
-      const response = await electionProcessChat({ 
-        query: userMessage, 
-        location: location.trim() || undefined,
-        mode: isEli10 ? 'eli10' : 'standard',
-        image: userImage || undefined
-      });
-      setMessages(prev => [...prev, { role: "bot", content: response.answer }]);
-    } catch {
-      setMessages(prev => [...prev, { role: "bot", content: "Sorry, I encountered an error. Please try again." }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    messages,
+    input,
+    setInput,
+    location,
+    setLocation,
+    isLoading,
+    isEli10,
+    setIsEli10,
+    selectedImage,
+    scrollRef,
+    fileInputRef,
+    handleImageSelect,
+    clearImage,
+    handleSubmit
+  } = useVoterBot();
 
   return (
     <div className="flex flex-col h-full max-h-[700px]">
@@ -175,7 +127,7 @@ export function VoterBotChatWidget() {
               type="button" 
               size="icon" 
               className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-destructive text-destructive-foreground shadow-sm"
-              onClick={() => setSelectedImage(null)}
+              onClick={clearImage}
               aria-label="Remove attached image"
             >
               <X className="h-3 w-3" />
@@ -223,4 +175,3 @@ export function VoterBotChatWidget() {
     </div>
   );
 }
-

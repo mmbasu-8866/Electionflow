@@ -1,14 +1,17 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import TimelinePage from './page'
 import { expect, test } from 'vitest'
 
-test('renders timeline page and filters events', () => {
+test('renders timeline page and events', () => {
   render(<TimelinePage />)
-  expect(screen.getByText('Election Cycle Tracker')).toBeInTheDocument()
+  expect(screen.getByText('Election Cycle Timeline')).toBeInTheDocument()
   
-  const filterInput = screen.getByPlaceholderText(/filter by keyword/i)
-  fireEvent.change(filterInput, { target: { value: 'Deadline' } })
-  
-  expect(screen.getByText('Registration Deadline')).toBeInTheDocument()
-  expect(screen.queryByText('Early Voting Starts')).not.toBeInTheDocument()
+  // Check for specific events
+  expect(screen.getByText('Voter Registration Opens')).toBeInTheDocument()
+  expect(screen.getByText('General Election Day')).toBeInTheDocument()
+})
+
+test('renders calendar sync card', () => {
+  render(<TimelinePage />)
+  expect(screen.getByText('Sync to Calendar')).toBeInTheDocument()
 })

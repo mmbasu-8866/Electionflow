@@ -8,34 +8,47 @@ import {
   MoreHorizontal, 
   MapPin,
   ChevronDown,
-  TrendingUp,
   Bot,
   Sparkles
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { 
-  ResponsiveContainer, 
-  XAxis, 
-  Tooltip, 
-  Cell, 
-  Pie, 
-  PieChart,
-  Label,
-  RadialBar,
-  RadialBarChart,
-  BarChart,
-  Bar
-} from "recharts";
+import { CandidateStats } from "./candidate-stats";
+import { GeographicCoverage } from "./geographic-coverage";
 
-// Dynamically import heavy components
-const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bot-chat-widget").then(mod => mod.VoterBotChatWidget), {
+/**
+ * Dynamically import heavy chart components to improve performance.
+ */
+const VoteStats = dynamic(() => import("./vote-stats").then(mod => mod.VoteStats), { 
   ssr: false,
-  loading: () => <div className="h-[400px] flex items-center justify-center bg-muted/20 animate-pulse">Loading Assistant...</div>
+  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
 });
 
+const PartyStats = dynamic(() => import("./party-stats").then(mod => mod.PartyStats), { 
+  ssr: false,
+  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
+});
+
+const VoterProfile = dynamic(() => import("./voter-profile").then(mod => mod.VoterProfile), { 
+  ssr: false,
+  loading: () => <div className="h-64 bg-muted/10 animate-pulse rounded-3xl" />
+});
+
+/**
+ * Dynamically import the heavy Chat Widget to improve initial load performance.
+ */
+const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bot-chat-widget").then(mod => mod.VoterBotChatWidget), {
+  ssr: false,
+  loading: () => <div className="h-[400px] flex items-center justify-center bg-muted/20 animate-pulse rounded-2xl">
+    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">Loading Assistant...</span>
+  </div>
+});
+
+/**
+ * DashboardContent - The main dashboard view for Electionflow.
+ * Displays real-time stats, party leads, and AI assistant.
+ */
 export function DashboardContent() {
   const votePercentage = 85;
 
@@ -66,7 +79,8 @@ export function DashboardContent() {
   ], []);
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-6 pb-12 animate-fade-in">
+    <div className="space-y-6 pb-12">
+      <h2 className="sr-only">Dashboard Overview</h2>
       {/* Top Header Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-card p-4 rounded-3xl border shadow-sm">
         <div className="flex items-center gap-4 w-full md:w-auto">
@@ -99,85 +113,12 @@ export function DashboardContent() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" role="region" aria-label="Top Stats Overview">
-        {/* Votes Received Radial Chart */}
-        <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden" role="status" aria-label={`Current vote count: ${votePercentage}% counted`}>
-          <CardHeader className="pb-0">
-            <CardTitle className="text-xl font-bold text-primary">Votes Received</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center pt-6">
-            <div className="relative h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadialBarChart
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={80}
-                  outerRadius={120}
-                  barSize={15}
-                  data={[{ value: votePercentage, fill: "hsl(var(--primary))" }]}
-                  startAngle={180}
-                  endAngle={0}
-                >
-                  <RadialBar
-                    background
-                    dataKey="value"
-                    cornerRadius={10}
-                  />
-                </RadialBarChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center pt-8">
-                <span className="text-5xl font-black">{votePercentage}%</span>
-                <span className="text-sm font-bold text-muted-foreground">2.432.766 Votes</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Top Party */}
-        <Card className="rounded-[2.5rem] border shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold text-primary">Top Party</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {partyData.map((party, idx) => (
-              <div key={idx} className="flex items-center justify-between group">
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-full border bg-white flex items-center justify-center p-2 shadow-sm">
-                     <div className="h-full w-full rounded-full" style={{ backgroundColor: party.color }} />
-                  </div>
-                  <span className="font-bold text-lg group-hover:text-primary transition-colors">{party.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-black text-lg">{party.votes}</span>
-                  <span className="text-xs text-muted-foreground font-bold">Votes</span>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Top Candidates */}
-        <Card className="rounded-[2.5rem] border shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold text-primary">Top Candidates</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-5">
-              {candidates.map((c, idx) => (
-                <div key={idx} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-3">
-                    <span className="font-black text-primary w-4">{String(idx + 1).padStart(2, '0')}</span>
-                    <span className="font-bold truncate max-w-[120px]">{c.name}</span>
-                  </div>
-                  <Badge variant="outline" className="text-[10px] h-5">{c.party}</Badge>
-                  <span className="font-black">{c.votes} Votes</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <VoteStats percentage={votePercentage} totalVotes="2.432.766" />
+        <PartyStats data={partyData} />
+        <CandidateStats candidates={candidates} />
       </div>
 
-      {/* AI Assistant Section (Positioned above Geographic Coverage) */}
+      {/* AI Assistant Section */}
       <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden bg-card">
         <CardHeader className="bg-primary/5 border-b shrink-0 py-4">
           <div className="flex items-center justify-between">
@@ -203,142 +144,9 @@ export function DashboardContent() {
         </CardContent>
       </Card>
 
-      {/* Region Heatmap Card (Geographic Coverage) */}
-      <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden h-[450px] relative">
-        <CardHeader className="absolute top-0 left-0 z-10 bg-card/80 backdrop-blur-md w-full border-b">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold text-primary">Geographic Coverage</CardTitle>
-            <Badge className="bg-green-500/10 text-green-600 border-none">94.2% Counted</Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0 h-full">
-           <div className="w-full h-full bg-muted relative group">
-              <Image 
-                src="https://picsum.photos/seed/heatmap/1200/800" 
-                alt="Interactive geographic heatmap showing voter turnout across Jawa Barat Region-1" 
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 1000px"
-                className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" 
-                unoptimized
-              />
-              <div className="absolute top-1/2 left-1/3 h-48 w-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute top-1/4 left-1/2 h-32 w-32 bg-primary/30 rounded-full blur-2xl" />
-              <div className="absolute bottom-1/4 right-1/4 h-64 w-64 bg-primary/10 rounded-full blur-3xl" />
-              <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2">
-                <div className="h-10 w-10 bg-white rounded-full p-2 shadow-2xl border-2 border-primary flex items-center justify-center">
-                  <div className="h-full w-full bg-[#E31E24] rounded-full" />
-                </div>
-              </div>
-              <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border" aria-label="Zoom in map">+</Button>
-                <Button size="icon" variant="secondary" className="rounded-xl shadow-lg border" aria-label="Zoom out map">-</Button>
-              </div>
-           </div>
-        </CardContent>
-      </Card>
-
-      {/* Voter Profile Section */}
-      <div className="space-y-4">
-        <h3 className="text-2xl font-bold text-primary px-2">Voter&apos;s Profile</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="rounded-[2.5rem] border shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold">Gender Distribution</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <div className="h-48 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={genderData}
-                      dataKey="value"
-                      innerRadius={60}
-                      outerRadius={80}
-                      strokeWidth={5}
-                      paddingAngle={5}
-                    >
-                      <Label
-                        content={({ viewBox }) => {
-                          const vb = viewBox as { cx: number; cy: number };
-                          if (vb && typeof vb.cx === 'number' && typeof vb.cy === 'number') {
-                            return (
-                              <text x={vb.cx} y={vb.cy} textAnchor="middle" dominantBaseline="middle">
-                                <tspan x={vb.cx} y={vb.cy} className="fill-foreground text-2xl font-black">2.4M</tspan>
-                                <tspan x={vb.cx} y={vb.cy + 24} className="fill-muted-foreground text-xs font-bold">Total</tspan>
-                              </text>
-                            )
-                          }
-                        }}
-                      />
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="flex gap-6 mt-4">
-                <div className="flex items-center gap-2 text-sm font-bold">
-                  <div className="h-3 w-3 rounded-full bg-primary" />
-                  <span>Male 60%</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
-                  <div className="h-3 w-3 rounded-full bg-primary/30" />
-                  <span>Female 40%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-[2.5rem] border shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold">Age Demographics</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-48 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={ageData}>
-                    <XAxis 
-                      dataKey="age" 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fontSize: 10, fontWeight: 'bold' }} 
-                    />
-                    <Tooltip 
-                      cursor={{ fill: 'transparent' }}
-                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                    />
-                    <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                      {ageData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={index === 3 ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.2)"} 
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-[2.5rem] border shadow-sm bg-gradient-to-br from-primary to-primary/80 text-white">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold">Average Submission Time</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center pt-4">
-               <div className="h-36 w-36 rounded-full border-4 border-white/20 flex items-center justify-center relative">
-                  <div className="flex flex-col items-center">
-                    <span className="text-4xl font-black">25.46</span>
-                    <span className="text-xs font-bold opacity-80 uppercase tracking-widest">Minutes</span>
-                  </div>
-                  <div className="absolute inset-0 border-4 border-transparent border-t-white rounded-full animate-[spin_3s_linear_infinite]" />
-               </div>
-               <div className="flex items-center gap-2 mt-6">
-                 <TrendingUp className="h-4 w-4" />
-                 <span className="text-sm font-bold">+12% faster than 2019</span>
-               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <GeographicCoverage />
+      
+      <VoterProfile genderData={genderData} ageData={ageData} />
     </div>
   );
 }

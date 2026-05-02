@@ -1,32 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, waitFor } from '@testing-library/react'
 import { DashboardContent } from './dashboard-content'
 import { expect, test, vi } from 'vitest'
+import React, { ReactNode } from 'react'
 
-// Mock next/dynamic
+// Correct mock for next/dynamic
 vi.mock('next/dynamic', () => ({
-  default: () => {
-    // If it's the assistant, return the test-id div
-    const Component = () => {
-      // Check if the dynamic import is for the assistant
-      return <div data-testid="voter-bot-chat-widget" />;
+  default: (loader: () => Promise<any>) => {
+    return function DynamicComponent(props: any) {
+      const [Component, setComponent] = React.useState<any>(null);
+      React.useEffect(() => {
+        loader().then((mod: any) => {
+          const Comp = mod.VoteStats || mod.PartyStats || mod.VoterProfile || mod.VoterBotChatWidget || mod;
+          setComponent(() => Comp);
+        });
+      }, []);
+      if (!Component) return <div data-testid="loading" />;
+      return <Component {...props} />;
     };
-    return Component;
   }
-}))
-
-// Mock subcomponents
-vi.mock('@/components/assistant/voter-bot-chat-widget', () => ({
-  VoterBotChatWidget: () => <div data-testid="voter-bot-chat-widget" />
 }))
 
 // Mock recharts
 vi.mock('recharts', () => ({
-  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  RadialBarChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  RadialBarChart: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   RadialBar: () => <div />,
-  PieChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  PieChart: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   Pie: () => <div />,
-  BarChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  BarChart: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   Bar: () => <div />,
   XAxis: () => <div />,
   Tooltip: () => <div />,
@@ -34,13 +36,21 @@ vi.mock('recharts', () => ({
   Label: () => <div />,
 }))
 
-test('DashboardContent renders correctly', async () => {
+// Mock subcomponents
+vi.mock('@/components/assistant/voter-bot-chat-widget', () => ({
+  VoterBotChatWidget: () => <div data-testid="assistant" />
+}))
+
+test('DashboardContent renders and loads dynamic components', async () => {
   render(<DashboardContent />)
-  expect(screen.getByText('Votes Received')).toBeInTheDocument()
-  expect(screen.getByText('Top Party')).toBeInTheDocument()
+  
+  // Static content
   expect(screen.getByText('Top Candidates')).toBeInTheDocument()
+  
+  // Wait for dynamic components
   await waitFor(() => {
-    const elements = screen.getAllByTestId('voter-bot-chat-widget')
-    expect(elements.length).toBeGreaterThan(0)
-  }, { timeout: 2000 })
+    expect(screen.getByText('Votes Received')).toBeInTheDocument()
+    expect(screen.getByText('Top Party')).toBeInTheDocument()
+    expect(screen.getByText("Voter's Profile")).toBeInTheDocument()
+  }, { timeout: 5000 })
 })

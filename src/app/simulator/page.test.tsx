@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import SimulatorPage from './page'
 import { expect, test, vi, beforeEach, describe } from 'vitest'
@@ -15,7 +16,15 @@ vi.mock('@/hooks/use-toast', () => ({
 vi.mock('firebase/firestore', () => ({
   collection: vi.fn(),
   query: vi.fn(),
-  onSnapshot: vi.fn(() => vi.fn()), // returns unsubscribe
+  limit: vi.fn(),
+  onSnapshot: vi.fn((q, cb) => {
+    // Immediate callback to simulate firestore data
+    cb({
+      size: 1,
+      forEach: (iterCb: any) => iterCb({ data: () => ({ candidateId: "c1" }) })
+    });
+    return vi.fn();
+  }),
   getFirestore: vi.fn(),
 }))
 
@@ -42,6 +51,9 @@ describe('SimulatorPage', () => {
     expect(screen.getByText('Mock Voting Simulator')).toBeInTheDocument()
     expect(screen.getByText('Modern Progressive Alliance')).toBeInTheDocument()
     expect(screen.getByText('Traditional Values Party')).toBeInTheDocument()
+    
+    // Data check based on our mock
+    expect(screen.getByText(/1 Votes/)).toBeInTheDocument()
   })
 
   test('handles voting click', async () => {
@@ -64,5 +76,20 @@ describe('SimulatorPage', () => {
     fireEvent.click(voteButtons[0])
 
     expect(toast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Auth Required' }))
+  })
+
+  test('handles vote failure', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ error: 'Server error' }),
+    } as unknown as Response)
+    
+    render(<SimulatorPage />)
+    const voteButtons = screen.getAllByRole('button', { name: /Cast your vote/i })
+    fireEvent.click(voteButtons[0])
+
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Submission Failed' }))
+    })
   })
 })

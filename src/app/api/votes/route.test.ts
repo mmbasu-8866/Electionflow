@@ -41,8 +41,7 @@ describe('POST /api/votes', () => {
   })
 
   it('saves a vote with null userId', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as any)
+    vi.mocked(addDoc).mockResolvedValueOnce({ id: '123' } as DocumentReference)
     const request = new Request('http://localhost/api/votes', {
       method: 'POST',
       body: JSON.stringify({ candidateId: 'cand1' }),

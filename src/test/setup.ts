@@ -24,4 +24,17 @@ vi.mock('firebase/firestore', () => ({
   doc: vi.fn(),
   getDocs: vi.fn(),
   onSnapshot: vi.fn(),
+  query: vi.fn(),
+  orderBy: vi.fn(),
+  limit: vi.fn(),
+  addDoc: vi.fn(),
+  serverTimestamp: vi.fn(),
 }))
+
+// Mock ResizeObserver for Recharts
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+window.ResizeObserver = ResizeObserver;
