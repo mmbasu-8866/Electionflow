@@ -21,19 +21,14 @@ export function GoogleMap({ center, zoom = 12, markers = [], className }: Google
   const mapRef = useRef<HTMLDivElement>(null);
   const googleMapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
-  const [error, setError] = useState<string | null>(() => {
-    if (typeof window !== "undefined" && !process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
-      return "Google Maps API key is missing.";
-    }
-    return null;
-  });
+  const [error, setError] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Initialize Map
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyA6D015xkZ_tvAw3367IO_WbmRUdg5R1uc";
     
-    if (!apiKey || error) return;
+    if (!apiKey) return;
 
     const loader = new Loader({
       apiKey,
