@@ -70,8 +70,8 @@ export default function SimulatorPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-white" role="banner">
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-card" role="banner">
         <h1 className="text-xl font-headline font-bold text-accent">Mock Voting Simulator</h1>
       </header>
       <main className="flex-1 overflow-y-auto p-6 space-y-8" role="main" aria-label="Voting Simulation Tool">

@@ -13,7 +13,7 @@ interface Notification {
   message: string;
   type: 'update' | 'alert' | 'result' | string;
   time?: string;
-  timestamp?: any;
+  timestamp?: unknown;
 }
 
 const mockNotifications: Notification[] = [
@@ -48,8 +48,8 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-white shadow-sm" role="banner">
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-6 bg-card shadow-sm" role="banner">
         <Bell className="h-5 w-5 text-primary" aria-hidden="true" />
         <h1 className="text-xl font-headline font-bold text-accent">Live Election Alerts</h1>
       </header>

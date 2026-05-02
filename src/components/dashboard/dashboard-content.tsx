@@ -27,6 +27,7 @@ import {
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { VoterBotChatWidget } from "@/components/assistant/voter-bot-chat-widget";
+import Image from "next/image";
 
 const ageData = [
   { age: "17-25", count: 2100 },
@@ -247,11 +248,12 @@ export function DashboardContent() {
                     >
                       <Label
                         content={({ viewBox }) => {
-                          if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                          const vb = viewBox as { cx: number; cy: number };
+                          if (vb && typeof vb.cx === 'number' && typeof vb.cy === 'number') {
                             return (
-                              <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                                <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-2xl font-black">2.4M</tspan>
-                                <tspan x={viewBox.cx} y={viewBox.cy + 24} className="fill-muted-foreground text-xs font-bold">Total</tspan>
+                              <text x={vb.cx} y={vb.cy} textAnchor="middle" dominantBaseline="middle">
+                                <tspan x={vb.cx} y={vb.cy} className="fill-foreground text-2xl font-black">2.4M</tspan>
+                                <tspan x={vb.cx} y={vb.cy + 24} className="fill-muted-foreground text-xs font-bold">Total</tspan>
                               </text>
                             )
                           }

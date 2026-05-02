@@ -23,6 +23,7 @@ export type ElectionProcessChatOutput = z.infer<typeof ElectionProcessChatOutput
 
 const prompt = ai.definePrompt({
   name: 'electionFlowAssistantPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: ElectionProcessChatInputSchema},
   output: {schema: ElectionProcessChatOutputSchema},
   prompt: `You are ElectionFlow Assistant, an expert in global and local election processes.
@@ -38,7 +39,14 @@ const prompt = ai.definePrompt({
   4. Always remain neutral and objective.`,
 });
 
-export async function electionProcessChat(input: ElectionProcessChatInput): Promise<ElectionProcessChatOutput> {
-  const {output} = await prompt(input);
-  return output!;
-}
+export const electionProcessChat = ai.defineFlow(
+  {
+    name: 'electionProcessChat',
+    inputSchema: ElectionProcessChatInputSchema,
+    outputSchema: ElectionProcessChatOutputSchema,
+  },
+  async (input) => {
+    const {output} = await prompt(input);
+    return output!;
+  }
+);

@@ -5,16 +5,19 @@ import { MapPin, Navigation, Info, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import Image from "next/image";
+import { GoogleMap } from "@/components/ui/google-map";
 
 const votingCenters = [
-  { id: 1, name: "Central High School Gym", address: "123 Democracy Ave, West District", status: "Open", capacity: "85%" },
-  { id: 2, name: "Public Library Wing B", address: "456 Civic Center Plaza", status: "Open", capacity: "40%" },
-  { id: 3, name: "Community Center Hall", address: "789 Unity Road, East Side", status: "Closed", capacity: "0%" },
-  { id: 4, name: "St. Mary's Parish Hall", address: "101 Liberty St, North Point", status: "Open", capacity: "65%" },
+  { id: 1, name: "Central High School Gym", address: "123 Democracy Ave, West District", status: "Open", capacity: "85%", lat: -6.9175, lng: 107.6191 },
+  { id: 2, name: "Public Library Wing B", address: "456 Civic Center Plaza", status: "Open", capacity: "40%", lat: -6.9205, lng: 107.6251 },
+  { id: 3, name: "Community Center Hall", address: "789 Unity Road, East Side", status: "Closed", capacity: "0%", lat: -6.9145, lng: 107.6101 },
+  { id: 4, name: "St. Mary's Parish Hall", address: "101 Liberty St, North Point", status: "Open", capacity: "65%", lat: -6.9255, lng: 107.6151 },
 ];
 
 export default function RegionPage() {
-  const pollingImage = PlaceHolderImages.find(img => img.id === 'polling-station');
+  const mapCenter = { lat: -6.9175, lng: 107.6191 }; // Bandung center
+  const markers = votingCenters.map(c => ({ lat: c.lat, lng: c.lng, title: c.name }));
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -26,34 +29,19 @@ export default function RegionPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Map View */}
             <Card className="lg:col-span-2 rounded-[2.5rem] border shadow-sm overflow-hidden min-h-[500px] relative group">
-               <div className="absolute inset-0">
-                 <Image
-                   src={pollingImage?.imageUrl || "https://picsum.photos/seed/map1/1200/800"}
-                   alt="Interactive regional map showing voting centers and live coverage for Jabar-1"
-                   fill
-                   className="object-cover opacity-80"
-                   unoptimized
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-               </div>              <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
-                <Badge className="bg-primary text-white text-xs px-3 py-1 rounded-full shadow-lg">Live Map View</Badge>
+               <GoogleMap 
+                 center={mapCenter} 
+                 markers={markers} 
+                 className="absolute inset-0 w-full h-full"
+                 zoom={13}
+               />
+              <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
+                <Badge className="bg-primary text-white text-xs px-3 py-1 rounded-full shadow-lg">Live Interactive Map</Badge>
               </div>
-              {/* Map Pins Overlay */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/3 left-1/4 animate-bounce pointer-events-auto cursor-pointer">
-                  <div className="h-10 w-10 bg-white rounded-full p-1 shadow-2xl border-2 border-primary">
-                    <MapPin className="h-full w-full text-primary" />
-                  </div>
-                </div>
-                <div className="absolute bottom-1/3 right-1/2 animate-pulse pointer-events-auto cursor-pointer">
-                  <div className="h-8 w-8 bg-white rounded-full p-1 shadow-2xl border-2 border-accent">
-                    <MapPin className="h-full w-full text-accent" />
-                  </div>
-                </div>
-              </div>
-              <CardHeader className="absolute bottom-0 left-0 w-full p-8 z-10">
-                <CardTitle className="text-white text-3xl font-black drop-shadow-md">Daerah Pemilihan Jabar-1</CardTitle>
-                <p className="text-white/80 font-bold">Interactive Region Coverage & Live Feed</p>
+              
+              <CardHeader className="absolute bottom-0 left-0 w-full p-8 z-10 bg-gradient-to-t from-background/90 to-transparent">
+                <CardTitle className="text-foreground text-3xl font-black drop-shadow-sm">Daerah Pemilihan Jabar-1</CardTitle>
+                <p className="text-muted-foreground font-bold">Interactive Region Coverage & Live Center Status</p>
               </CardHeader>
             </Card>
 

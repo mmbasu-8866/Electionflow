@@ -97,14 +97,16 @@ export default function PopulationPage() {
                       >
                          <Label
                           content={({ viewBox }) => {
-                            if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                            const vb = viewBox as { cx: number; cy: number };
+                            if (vb && typeof vb.cx === 'number' && typeof vb.cy === 'number') {
                               return (
-                                <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                                  <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-black">4.2M</tspan>
-                                  <tspan x={viewBox.cx} y={viewBox.cy + 24} className="fill-muted-foreground text-xs font-bold">Active Voters</tspan>
+                                <text x={vb.cx} y={vb.cy} textAnchor="middle" dominantBaseline="middle">
+                                  <tspan x={vb.cx} y={vb.cy} className="fill-foreground text-3xl font-black">4.2M</tspan>
+                                  <tspan x={vb.cx} y={vb.cy + 24} className="fill-muted-foreground text-xs font-bold">Active Voters</tspan>
                                 </text>
                               )
                             }
+
                           }}
                         />
                       </Pie>

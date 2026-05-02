@@ -86,7 +86,7 @@ export function VoterBotChatWidget() {
         </div>
       </div>
 
-      <ScrollArea className="flex-1 p-4" ref={scrollRef} aria-live="polite" aria-relevant="additions">
+      <ScrollArea className="flex-1 p-4" ref={scrollRef} aria-live="polite" aria-relevant="additions" role="log">
         <div className="space-y-4">
           {messages.map((m, i) => (
             <div 
