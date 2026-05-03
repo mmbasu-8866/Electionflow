@@ -9,6 +9,14 @@ const VoteSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Basic security: check origin
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  
+  if (origin && !origin.includes(host || "")) {
+     return NextResponse.json({ error: "Unauthorized origin" }, { status: 403 });
+  }
+
   try {
     const json = await request.json();
     const result = VoteSchema.safeParse(json);

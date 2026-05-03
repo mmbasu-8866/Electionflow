@@ -3,8 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts";
 import { PageContainer } from "@/components/layout/page-container";
+import dynamic from "next/dynamic";
+
+const PartyVoteChart = dynamic(() => import("@/components/dashboard/party-vote-chart").then(mod => mod.PartyVoteChart), { ssr: false });
 
 /**
  * PartyCandidatesPage - Recapitulation of votes by political party.
@@ -29,29 +31,7 @@ export default function PartyCandidatesPage() {
           </CardHeader>
           <CardContent>
             <div className="h-[500px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={partyData} layout="vertical" margin={{ left: 20, right: 40 }}>
-                  <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fontSize: 12, fontWeight: 'bold' }}
-                    width={100}
-                  />
-                  <Tooltip 
-                    cursor={{ fill: 'transparent' }}
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                    formatter={(value: number) => [new Intl.NumberFormat().format(value) + " Votes", "Count"]}
-                  />
-                  <Bar dataKey="votes" radius={[0, 10, 10, 0]} barSize={40}>
-                    {partyData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <PartyVoteChart data={partyData} />
             </div>
           </CardContent>
         </Card>

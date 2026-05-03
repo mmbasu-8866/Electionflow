@@ -69,16 +69,15 @@ export function DashboardContent() {
       {/* Top Header Bar */}
       <section className="flex flex-col md:flex-row items-center justify-between gap-4 bg-card p-4 rounded-3xl border shadow-sm" aria-label="Dashboard Controls">
         <div className="flex items-center gap-4 w-full md:w-auto">
-          <div 
-            className="flex items-center gap-2 bg-secondary px-4 py-2 rounded-2xl cursor-pointer hover:bg-secondary/80 transition-colors border"
-            role="button"
+          <Button 
+            variant="secondary"
+            className="flex items-center gap-2 bg-secondary px-4 py-2 rounded-2xl cursor-pointer hover:bg-secondary/80 transition-colors border h-auto"
             aria-label="Change region: Current region Jawa Barat Region-1"
-            tabIndex={0}
           >
             <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
             <span className="text-sm font-semibold">Daerah Pemilihan Jawa Barat Region-1</span>
             <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-          </div>
+          </Button>
           <Button variant="outline" size="icon" className="rounded-full h-10 w-10" aria-label="Search across regions">
             <Search className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -120,12 +119,15 @@ export function DashboardContent() {
                 <div>
                   <CardTitle className="text-lg font-black flex items-center gap-2 text-primary">
                     Election Assistant
-                    <Sparkles className="h-3 w-3 text-accent" aria-hidden="true" />
+                    <Sparkles className="h-3 w-3 text-accent animate-pulse" aria-hidden="true" />
                   </CardTitle>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Powered Insights & Real-time Q&A</p>
                 </div>
               </div>
-              <Badge className="bg-primary/10 text-primary border-none font-bold" aria-live="polite">LIVE & READY</Badge>
+              <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-green-500 animate-ping" />
+                <Badge className="bg-primary/10 text-primary border-none font-bold" aria-live="polite">LIVE & READY</Badge>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">

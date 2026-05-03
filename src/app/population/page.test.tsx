@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import PopulationPage from './page'
 import { expect, test, vi } from 'vitest'
 import { ReactNode } from 'react'
@@ -29,7 +29,7 @@ vi.mock('recharts', () => ({
   },
 }))
 
-test('renders population page and data', () => {
+test('renders population page and data', async () => {
   render(<PopulationPage />)
   expect(screen.getByText('Population & Voter Data')).toBeInTheDocument()
   expect(screen.getByText('Total Population')).toBeInTheDocument()
@@ -43,6 +43,8 @@ test('renders population page and data', () => {
   expect(screen.getByText('District Participation')).toBeInTheDocument()
   expect(screen.getByText('Demographic Breakdown')).toBeInTheDocument()
   
-  // Check mock label output
-  expect(screen.getByText('Active Voters')).toBeInTheDocument()
+  // Check mock label output (wait for dynamic chart)
+  await waitFor(() => {
+    expect(screen.getByText('Active Voters')).toBeInTheDocument()
+  }, { timeout: 5000 })
 })

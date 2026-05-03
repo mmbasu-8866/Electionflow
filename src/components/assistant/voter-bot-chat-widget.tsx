@@ -154,7 +154,7 @@ export function VoterBotChatWidget() {
             <Paperclip className="h-4 w-4" />
           </Button>
           <Input 
-            placeholder={isEli10 ? "Ask a simple question..." : "Ask about trends, Karnataka leads..."} 
+            placeholder={isEli10 ? "Ask a simple question..." : "Ask about trends, Jabar-1 leads..."} 
             aria-label="Chat message input"
             value={input}
             onChange={(e) => setInput(e.target.value)}

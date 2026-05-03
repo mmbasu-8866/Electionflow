@@ -9,12 +9,13 @@ import { PageContainer } from "@/components/layout/page-container";
 const glossaryTerms = [
   { term: "Absentee Ballot", def: "A ballot cast by someone who is unable or unwilling to attend the official polling station to which they are normally allocated." },
   { term: "Canvassing", def: "The process of systematically contacting individuals to solicit their votes or gather information during a political campaign." },
-  { term: "Electoral College", def: "A body of people representing the states of the US, who formally cast votes for the election of the president and vice president." },
+  { term: "Constituency", def: "A body of voters in a specified area who elect a representative to a legislative body." },
   { term: "Gerrymander", def: "To manipulate the boundaries of (an electoral constituency) so as to favor one party or class." },
   { term: "Incumbent", def: "The current holder of an office or post." },
-  { term: "Primary Election", def: "An election to appoint delegates to a party conference or to select the candidates for a principal, especially presidential, election." },
+  { term: "KPU", def: "Komisi Pemilihan Umum (General Elections Commission) - the body responsible for organizing elections in Indonesia." },
+  { term: "Primary Election", def: "An election to select the candidates for a principal election." },
   { term: "Referendum", def: "A general vote by the electorate on a single political question which has been referred to them for a direct decision." },
-  { term: "Super Tuesday", def: "A day on which several US states hold primary elections." },
+  { term: "Threshold", def: "The minimum share of the primary vote which a candidate or political party requires before they can become entitled to representation." },
   { term: "Voter Suppression", def: "Any effort to discourage or prevent specific groups of people from voting." },
   { term: "Write-in Candidate", def: "A candidate whose name does not appear on the ballot but for whom voters may vote by writing in the person's name." },
 ];

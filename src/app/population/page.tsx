@@ -1,12 +1,13 @@
 "use client";
 
-"use client";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Users, PieChart as PieChartIcon, TrendingUp, Map } from "lucide-react";
 import { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, PieChart, Pie, Label } from "recharts";
 import { PageContainer } from "@/components/layout/page-container";
+import dynamic from "next/dynamic";
+
+const DistrictParticipationChart = dynamic(() => import("@/components/dashboard/population-charts").then(mod => mod.PopulationCharts.DistrictParticipation), { ssr: false });
+const DemographicBreakdownChart = dynamic(() => import("@/components/dashboard/population-charts").then(mod => mod.PopulationCharts.DemographicBreakdown), { ssr: false });
 
 /**
  * PopulationPage - Detailed view of voter demographics and district participation.
@@ -58,28 +59,7 @@ export default function PopulationPage() {
           </CardHeader>
           <CardContent>
             <div className="h-80 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={districtData} layout="vertical">
-                  <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fontSize: 12, fontWeight: 'bold' }} 
-                    width={100}
-                  />
-                  <Tooltip 
-                    cursor={{ fill: 'transparent' }}
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  />
-                  <Bar dataKey="registered" radius={[0, 6, 6, 0]} barSize={20}>
-                    {districtData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={index === 0 ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.2)"} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <DistrictParticipationChart data={districtData} />
             </div>
           </CardContent>
         </Card>
@@ -90,33 +70,7 @@ export default function PopulationPage() {
           </CardHeader>
           <CardContent className="flex items-center justify-center">
             <div className="h-80 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={genderData}
-                    dataKey="value"
-                    innerRadius={80}
-                    outerRadius={110}
-                    strokeWidth={8}
-                    paddingAngle={10}
-                  >
-                     <Label
-                      content={({ viewBox }) => {
-                        const vb = viewBox as { cx: number; cy: number };
-                        if (vb && typeof vb.cx === 'number' && typeof vb.cy === 'number') {
-                          return (
-                            <text x={vb.cx} y={vb.cy} textAnchor="middle" dominantBaseline="middle">
-                              <tspan x={vb.cx} y={vb.cy} className="fill-foreground text-3xl font-black">4.2M</tspan>
-                              <tspan x={vb.cx} y={vb.cy + 24} className="fill-muted-foreground text-xs font-bold">Active Voters</tspan>
-                            </text>
-                          )
-                        }
-
-                      }}
-                    />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
+              <DemographicBreakdownChart data={genderData} />
             </div>
           </CardContent>
         </Card>
