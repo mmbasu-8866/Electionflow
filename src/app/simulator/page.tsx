@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,63 @@ import { db } from "@/lib/firebase";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
 import { PageContainer } from "@/components/layout/page-container";
+
+interface Candidate {
+  id: string;
+  name: string;
+  party: string;
+  color: string;
+}
+
+/**
+ * Sub-component for candidate card to optimize re-renders.
+ */
+const CandidateCard = memo(function CandidateCard({ 
+  candidate, 
+  count, 
+  percent, 
+  hasVoted, 
+  onVote 
+}: { 
+  candidate: Candidate, 
+  count: number, 
+  percent: number, 
+  hasVoted: boolean, 
+  onVote: (id: string) => void 
+}) {
+  return (
+    <Card className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden" role="listitem">
+      <div className={`h-2 ${candidate.color}`} aria-hidden="true" />
+      <CardHeader>
+        <CardTitle className="text-lg">{candidate.name}</CardTitle>
+        <CardDescription>{candidate.party}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2" role="status" aria-atomic="true">
+          <div className="flex justify-between text-xs font-bold">
+            <span>LIVE COUNT</span>
+            <span>{count} Votes ({percent.toFixed(1)}%)</span>
+          </div>
+          <Progress 
+            value={percent} 
+            className="h-2" 
+            aria-label={`Vote percentage for ${candidate.name}: ${percent.toFixed(1)}%`}
+          />
+        </div>
+        <Button 
+          className="w-full rounded-full gap-2 font-black" 
+          variant={hasVoted ? "secondary" : "default"}
+          disabled={hasVoted}
+          onClick={() => onVote(candidate.id)}
+          aria-label={hasVoted ? `Already voted for ${candidate.name}` : `Cast your vote for ${candidate.name}`}
+        >
+          <Vote className="h-4 w-4" aria-hidden="true" />
+          {hasVoted ? "Voted" : "Cast Vote"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+});
 
 /**
  * SimulatorPage - Mock voting tool to demonstrate the logic of digital counting.
@@ -88,36 +145,14 @@ export default function SimulatorPage() {
             const percent = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
             
             return (
-              <Card key={c.id} className="rounded-3xl border-2 hover:border-primary/40 transition-all overflow-hidden" role="listitem">
-                <div className={`h-2 ${c.color}`} aria-hidden="true" />
-                <CardHeader>
-                  <CardTitle className="text-lg">{c.name}</CardTitle>
-                  <CardDescription>{c.party}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2" role="status" aria-atomic="true">
-                    <div className="flex justify-between text-xs font-bold">
-                      <span>LIVE COUNT</span>
-                      <span>{count} Votes ({percent.toFixed(1)}%)</span>
-                    </div>
-                    <Progress 
-                      value={percent} 
-                      className="h-2" 
-                      aria-label={`Vote percentage for ${c.name}: ${percent.toFixed(1)}%`}
-                    />
-                  </div>
-                  <Button 
-                    className="w-full rounded-full gap-2 font-black" 
-                    variant={hasVoted ? "secondary" : "default"}
-                    disabled={hasVoted}
-                    onClick={() => handleVote(c.id)}
-                    aria-label={hasVoted ? `Already voted for ${c.name}` : `Cast your vote for ${c.name}`}
-                  >
-                    <Vote className="h-4 w-4" aria-hidden="true" />
-                    {hasVoted ? "Voted" : "Cast Vote"}
-                  </Button>
-                </CardContent>
-              </Card>
+              <CandidateCard 
+                key={c.id} 
+                candidate={c} 
+                count={count} 
+                percent={percent} 
+                hasVoted={hasVoted} 
+                onVote={handleVote} 
+              />
             );
           })}
         </div>

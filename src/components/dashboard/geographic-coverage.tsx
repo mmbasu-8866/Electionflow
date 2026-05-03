@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { memo } from "react";
 
-export function GeographicCoverage() {
+export const GeographicCoverage = memo(function GeographicCoverage() {
   return (
     <Card className="rounded-[2.5rem] border shadow-sm overflow-hidden h-[450px] relative">
       <CardHeader className="absolute top-0 left-0 z-10 bg-card/80 backdrop-blur-md w-full border-b">
@@ -17,17 +18,17 @@ export function GeographicCoverage() {
       <CardContent className="p-0 h-full">
          <div className="w-full h-full bg-muted relative group">
             <Image 
-              src="https://picsum.photos/seed/heatmap/1200/800" 
+              src="https://images.unsplash.com/photo-1548345666-a5ae716fed6d?q=80&w=1200&auto=format&fit=crop" 
               alt="Interactive geographic heatmap showing voter turnout across Jawa Barat Region-1" 
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 1000px"
               className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" 
-              priority
+              loading="lazy"
             />
-            <div className="absolute top-1/2 left-1/3 h-48 w-48 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute top-1/4 left-1/2 h-32 w-32 bg-primary/30 rounded-full blur-2xl" />
-            <div className="absolute bottom-1/4 right-1/4 h-64 w-64 bg-primary/10 rounded-full blur-3xl" />
-            <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute top-1/2 left-1/3 h-48 w-48 bg-primary/20 rounded-full blur-3xl animate-pulse" aria-hidden="true" />
+            <div className="absolute top-1/4 left-1/2 h-32 w-32 bg-primary/30 rounded-full blur-2xl" aria-hidden="true" />
+            <div className="absolute bottom-1/4 right-1/4 h-64 w-64 bg-primary/10 rounded-full blur-3xl" aria-hidden="true" />
+            <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
               <div className="h-10 w-10 bg-white rounded-full p-2 shadow-2xl border-2 border-primary flex items-center justify-center">
                 <div className="h-full w-full bg-[#E31E24] rounded-full" />
               </div>
@@ -40,4 +41,4 @@ export function GeographicCoverage() {
       </CardContent>
     </Card>
   );
-}
+});

@@ -26,9 +26,12 @@ export function GoogleMap({ center, zoom = 12, markers = [], className }: Google
 
   // Initialize Map
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyA6D015xkZ_tvAw3367IO_WbmRUdg5R1uc";
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     
-    if (!apiKey) return;
+    if (!apiKey) {
+      setTimeout(() => setError("Google Maps API key is missing"), 0);
+      return;
+    }
 
     const loader = new Loader({
       apiKey,

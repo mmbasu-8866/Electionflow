@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import SimulatorPage from './page'
 import { expect, test, vi, beforeEach, describe } from 'vitest'
 import { useAuth } from '@/components/auth-provider'
 import { toast } from '@/hooks/use-toast'
+import { QuerySnapshot, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 
 vi.mock('@/components/auth-provider', () => ({
   useAuth: vi.fn(),
@@ -19,10 +19,14 @@ vi.mock('firebase/firestore', () => ({
   limit: vi.fn(),
   onSnapshot: vi.fn((q, cb) => {
     // Immediate callback to simulate firestore data
+    const mockDoc = {
+      data: () => ({ candidateId: "c1" })
+    } as unknown as QueryDocumentSnapshot<DocumentData>;
+    
     cb({
       size: 1,
-      forEach: (iterCb: any) => iterCb({ data: () => ({ candidateId: "c1" }) })
-    });
+      forEach: (iterCb: (doc: QueryDocumentSnapshot<DocumentData>) => void) => iterCb(mockDoc)
+    } as unknown as QuerySnapshot<DocumentData>);
     return vi.fn();
   }),
   getFirestore: vi.fn(),

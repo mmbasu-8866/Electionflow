@@ -13,14 +13,9 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
-import { CandidateStats } from "./candidate-stats";
-import { GeographicCoverage } from "./geographic-coverage";
-import { VoteStats } from "./vote-stats";
-import { PartyStats } from "./party-stats";
-import { VoterProfile } from "./voter-profile";
 
 /**
- * Dynamically import heavy components to improve TTI (Time to Interactive).
+ * Dynamically import heavy components to improve TTI and reduce initial bundle size.
  */
 const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bot-chat-widget").then(mod => mod.VoterBotChatWidget), {
   ssr: false,
@@ -28,6 +23,12 @@ const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bo
     <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">Loading Assistant...</span>
   </div>
 });
+
+const CandidateStats = dynamic(() => import("./candidate-stats").then(mod => mod.CandidateStats), { ssr: false });
+const GeographicCoverage = dynamic(() => import("./geographic-coverage").then(mod => mod.GeographicCoverage), { ssr: false });
+const VoteStats = dynamic(() => import("./vote-stats").then(mod => mod.VoteStats), { ssr: false });
+const PartyStats = dynamic(() => import("./party-stats").then(mod => mod.PartyStats), { ssr: false });
+const VoterProfile = dynamic(() => import("./voter-profile").then(mod => mod.VoterProfile), { ssr: false });
 
 const DASHBOARD_DATA = {
   votePercentage: 85,

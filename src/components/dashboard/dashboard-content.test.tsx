@@ -44,7 +44,7 @@ test('DashboardContent renders and loads dynamic components', async () => {
   render(<DashboardContent />)
   
   // Static content
-  expect(screen.getByText('Top Candidates')).toBeInTheDocument()
+  expect(screen.getByText('Electionflow Dashboard Overview')).toBeInTheDocument()
   
   // Wait for dynamic components
   await waitFor(() => {

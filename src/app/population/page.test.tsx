@@ -1,8 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react'
 import PopulationPage from './page'
 import { expect, test, vi } from 'vitest'
 import { ReactNode } from 'react'
+
+interface LabelProps {
+  viewBox?: {
+    cx: number
+    cy: number
+  }
+}
 
 // Mock recharts
 vi.mock('recharts', () => ({
@@ -15,7 +21,7 @@ vi.mock('recharts', () => ({
   Cell: () => <div />,
   PieChart: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   Pie: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-  Label: (props: { content?: (props: any) => ReactNode }) => {
+  Label: (props: { content?: (props: LabelProps) => ReactNode }) => {
     if (typeof props.content === 'function') {
       return <div>{props.content({ viewBox: { cx: 100, cy: 100 } })}</div>
     }
