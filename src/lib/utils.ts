@@ -25,10 +25,12 @@ export function sanitizeInput(input: string): string {
   return sanitized.trim();
 }
 
+const numberFormatter = new Intl.NumberFormat("id-ID");
+
 /**
  * Formats a number with a thousand separator.
  */
 export function formatNumber(num: number | string): string {
   const n = typeof num === "string" ? parseFloat(num) : num;
-  return new Intl.NumberFormat("id-ID").format(n);
+  return numberFormatter.format(n);
 }

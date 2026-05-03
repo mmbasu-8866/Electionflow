@@ -67,7 +67,10 @@ describe('SimulatorPage', () => {
     fireEvent.click(voteButtons[0])
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('/api/votes', expect.any(Object))
+      expect(fetch).toHaveBeenCalledWith('/api/votes', expect.objectContaining({
+        method: 'POST',
+        body: expect.stringContaining('"candidateId":"c1"'),
+      }))
       expect(toast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Vote Cast!' }))
     })
   })

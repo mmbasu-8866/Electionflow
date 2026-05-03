@@ -1,4 +1,3 @@
-
 "use client";
 
 import { 
@@ -35,6 +34,7 @@ import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
+import React, { memo } from "react";
 
 const mainNavItems = [
   { title: "Dashboard", url: "/", icon: Home },
@@ -58,6 +58,35 @@ const assistanceItems = [
   { title: "Election Glossary", url: "/glossary", icon: BookOpen },
 ];
 
+/**
+ * NavItem - Memoized sub-component for sidebar navigation links.
+ * Improves rendering performance by avoiding redundant updates.
+ */
+const NavItem = memo(({ item, pathname }: { item: {title: string, url: string, icon: React.ElementType}, pathname: string }) => (
+  <SidebarMenuItem>
+    <SidebarMenuButton
+      asChild
+      isActive={pathname === item.url}
+      className={`h-11 px-4 rounded-xl transition-all ${
+        pathname === item.url 
+        ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20" 
+        : "text-[#495057] dark:text-gray-300 hover:bg-[#F1F3F5] dark:hover:bg-gray-800 font-bold"
+      }`}
+      aria-label={`Navigate to ${item.title}`}
+    >
+      <Link href={item.url}>
+        <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} aria-hidden="true" />
+        <span className="font-black text-sm">{item.title}</span>
+      </Link>
+    </SidebarMenuButton>
+  </SidebarMenuItem>
+));
+NavItem.displayName = "NavItem";
+
+/**
+ * AppSidebar - Main navigation component for Electionflow.
+ * Optimized with modular components and real-time auth status.
+ */
 export function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
@@ -79,26 +108,6 @@ export function AppSidebar() {
       // Silent error handling for production
     }
   };
-
-  const NavItem = ({ item }: { item: {title: string, url: string, icon: React.ElementType} }) => (
-    <SidebarMenuItem>
-      <SidebarMenuButton
-        asChild
-        isActive={pathname === item.url}
-        className={`h-11 px-4 rounded-xl transition-all ${
-          pathname === item.url 
-          ? "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20" 
-          : "text-[#495057] dark:text-gray-300 hover:bg-[#F1F3F5] dark:hover:bg-gray-800 font-bold"
-        }`}
-        aria-label={`Navigate to ${item.title}`}
-      >
-        <Link href={item.url}>
-          <item.icon className={`h-5 w-5 ${pathname === item.url ? "text-white" : ""}`} aria-hidden="true" />
-          <span className="font-black text-sm">{item.title}</span>
-        </Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
 
   return (
     <Sidebar variant="sidebar" className="border-r bg-card">
@@ -123,7 +132,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">Explore</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {mainNavItems.map((item) => <NavItem key={item.title} item={item} />)}
+              {mainNavItems.map((item) => <NavItem key={item.title} item={item} pathname={pathname} />)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -132,7 +141,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">Interactive</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {interactiveItems.map((item) => <NavItem key={item.title} item={item} />)}
+              {interactiveItems.map((item) => <NavItem key={item.title} item={item} pathname={pathname} />)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -141,7 +150,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">Live Results</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {recapitulationItems.map((item) => <NavItem key={item.title} item={item} />)}
+              {recapitulationItems.map((item) => <NavItem key={item.title} item={item} pathname={pathname} />)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -150,7 +159,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">Assistance</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {assistanceItems.map((item) => <NavItem key={item.title} item={item} />)}
+              {assistanceItems.map((item) => <NavItem key={item.title} item={item} pathname={pathname} />)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

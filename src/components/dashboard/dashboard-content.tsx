@@ -14,13 +14,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
 
+import { memo } from "react";
+
 /**
  * Dynamically import heavy components to improve TTI and reduce initial bundle size.
  */
 const VoterBotChatWidget = dynamic(() => import("@/components/assistant/voter-bot-chat-widget").then(mod => mod.VoterBotChatWidget), {
   ssr: false,
   loading: () => <div className="h-[400px] flex items-center justify-center bg-muted/20 animate-pulse rounded-2xl" aria-label="Loading AI Assistant">
-    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">Loading Assistant...</span>
+    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground italic">Syncing with Jabar-1 node...</span>
   </div>
 });
 
@@ -59,12 +61,12 @@ const DASHBOARD_DATA = {
 /**
  * DashboardContent - The main dashboard view for Electionflow.
  */
-export function DashboardContent() {
+export const DashboardContent = memo(function DashboardContent() {
   const { votePercentage, ageData, partyData, candidates, genderData } = DASHBOARD_DATA;
 
   return (
     <div className="space-y-6 pb-12">
-      <h1 className="sr-only">Electionflow Dashboard Overview</h1>
+      <h2 className="sr-only">Dashboard Overview and Analytics</h2>
       
       {/* Top Header Bar */}
       <section className="flex flex-col md:flex-row items-center justify-between gap-4 bg-card p-4 rounded-3xl border shadow-sm" aria-label="Dashboard Controls">
@@ -147,4 +149,4 @@ export function DashboardContent() {
       </section>
     </div>
   );
-}
+});
