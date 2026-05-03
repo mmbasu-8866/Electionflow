@@ -1,11 +1,20 @@
-/* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
 import { GeographicCoverage } from './geographic-coverage'
 import { expect, test, vi } from 'vitest'
+import React from 'react'
+
+interface ImageProps {
+  src: string;
+  alt: string;
+  fill?: boolean;
+  priority?: boolean;
+  sizes?: string;
+  className?: string;
+}
 
 // Mock next/image
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string, alt: string }) => <img src={src} alt={alt} />
+  default: (props: ImageProps) => <img {...props} alt={props.alt} />
 }))
 
 test('GeographicCoverage renders map and header', () => {
@@ -19,4 +28,11 @@ test('GeographicCoverage zoom buttons have labels', () => {
   render(<GeographicCoverage />)
   expect(screen.getByLabelText('Zoom in map')).toBeInTheDocument()
   expect(screen.getByLabelText('Zoom out map')).toBeInTheDocument()
+})
+
+test('GeographicCoverage has decorative elements', () => {
+  const { container } = render(<GeographicCoverage />)
+  // Check for pulsing divs (decorative)
+  const pulsingElements = container.querySelectorAll('.animate-pulse')
+  expect(pulsingElements.length).toBeGreaterThan(0)
 })

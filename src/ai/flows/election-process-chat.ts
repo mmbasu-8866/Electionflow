@@ -7,6 +7,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { sanitizeInput } from '@/lib/utils';
 
 const ElectionProcessChatInputSchema = z.object({
   query: z.string().describe('The user\'s question.'),
@@ -57,7 +58,13 @@ export const electionProcessChat = ai.defineFlow(
     outputSchema: ElectionProcessChatOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
+    // Sanitize the input query to prevent prompt injection
+    const sanitizedInput = {
+      ...input,
+      query: sanitizeInput(input.query)
+    };
+    
+    const {output} = await prompt(sanitizedInput);
     return output!;
   }
 );

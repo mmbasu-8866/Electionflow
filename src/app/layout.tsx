@@ -38,12 +38,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://firestore.googleapis.com" />
       </head>
       <body className="font-body antialiased bg-background text-foreground" suppressHydrationWarning>
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <AuthProvider>
             <SidebarProvider>
               <AppSidebar />
               <SidebarInset>
-                {children}
+                <main id="main-content" className="flex-1 focus:outline-none" tabIndex={-1}>
+                  {children}
+                </main>
               </SidebarInset>
             </SidebarProvider>
             <Toaster />

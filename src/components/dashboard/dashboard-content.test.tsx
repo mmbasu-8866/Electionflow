@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, waitFor } from '@testing-library/react'
 import { DashboardContent } from './dashboard-content'
 import { expect, test, vi } from 'vitest'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, ComponentType } from 'react'
 
 // Correct mock for next/dynamic
 vi.mock('next/dynamic', () => ({
-  default: (loader: () => Promise<any>) => {
-    return function DynamicComponent(props: any) {
-      const [Component, setComponent] = React.useState<any>(null);
+  default: (loader: () => Promise<ComponentType | { default: ComponentType }>) => {
+    return function DynamicComponent(props: Record<string, unknown>) {
+      const [Component, setComponent] = React.useState<ComponentType | null>(null);
       React.useEffect(() => {
-        loader().then((mod: any) => {
-          const Comp = mod.VoteStats || mod.PartyStats || mod.VoterProfile || mod.VoterBotChatWidget || mod;
+        loader().then((mod) => {
+          const Comp = (mod as { default?: ComponentType }).default || (mod as ComponentType);
           setComponent(() => Comp);
         });
       }, []);
@@ -49,6 +48,7 @@ test('DashboardContent renders and loads dynamic components', async () => {
   
   // Wait for dynamic components
   await waitFor(() => {
+    // These strings are from subcomponents like VoteStats, PartyStats, VoterProfile
     expect(screen.getByText('Votes Received')).toBeInTheDocument()
     expect(screen.getByText('Top Party')).toBeInTheDocument()
     expect(screen.getByText("Voter's Profile")).toBeInTheDocument()

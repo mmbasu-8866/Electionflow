@@ -24,7 +24,7 @@ describe('POST /api/votes', () => {
     const response = await POST(request)
     const data = await response.json()
     expect(response.status).toBe(400)
-    expect(data.error).toBe('candidateId is required')
+    expect(data.error).toBe('Invalid request data')
   })
 
   it('saves a vote and returns ok', async () => {
@@ -61,6 +61,6 @@ describe('POST /api/votes', () => {
     const response = await POST(request)
     const data = await response.json()
     expect(response.status).toBe(500)
-    expect(data.error).toBe('Unable to save vote')
+    expect(data.error).toBe('Internal server error')
   })
 })
